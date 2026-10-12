@@ -1,5 +1,16 @@
 import axios from 'axios';
-import type { ScanResult, UserProfile, BasketAnalysis, DashboardData, Product } from '../types';
+import type { 
+  ScanResult, 
+  UserProfile, 
+  BasketAnalysis, 
+  DashboardData, 
+  Product,
+  SmartBasketPlanRequest,
+  SmartBasketRecommendationResponse,
+  IndianFoodItem,
+  ShoppingList,
+  ShoppingListItem
+} from '../types';
 
 const API_BASE = '/api';
 
@@ -116,3 +127,57 @@ export const dashboardService = {
     return res.data;
   }
 };
+
+export const smartBasketService = {
+  async getRecommendations(plan: SmartBasketPlanRequest): Promise<SmartBasketRecommendationResponse> {
+    const res = await api.post('/smart-basket/recommend', plan);
+    return res.data;
+  },
+
+  async getCatalogue(category?: string, search?: string): Promise<IndianFoodItem[]> {
+    const params = new URLSearchParams();
+    if (category) params.append('category', category);
+    if (search) params.append('search', search);
+    const res = await api.get(`/smart-basket/catalogue?${params.toString()}`);
+    return res.data;
+  },
+
+  async createShoppingList(data: any): Promise<ShoppingList> {
+    const res = await api.post('/smart-basket/lists', data);
+    return res.data;
+  },
+
+  async getShoppingLists(): Promise<ShoppingList[]> {
+    const res = await api.get('/smart-basket/lists');
+    return res.data;
+  },
+
+  async getShoppingList(id: number): Promise<ShoppingList> {
+    const res = await api.get(`/smart-basket/lists/${id}`);
+    return res.data;
+  },
+
+  async updateShoppingList(id: number, data: any): Promise<ShoppingList> {
+    const res = await api.put(`/smart-basket/lists/${id}`, data);
+    return res.data;
+  },
+
+  async addItemToList(listId: number, item: any): Promise<ShoppingListItem> {
+    const res = await api.post(`/smart-basket/lists/${listId}/items`, item);
+    return res.data;
+  },
+
+  async updateListItem(listId: number, itemId: number, data: any): Promise<ShoppingListItem> {
+    const res = await api.patch(`/smart-basket/lists/${listId}/items/${itemId}`, data);
+    return res.data;
+  },
+
+  async removeItemFromList(listId: number, itemId: number): Promise<void> {
+    await api.delete(`/smart-basket/lists/${listId}/items/${itemId}`);
+  },
+
+  async deleteShoppingList(listId: number): Promise<void> {
+    await api.delete(`/smart-basket/lists/${listId}`);
+  }
+};
+

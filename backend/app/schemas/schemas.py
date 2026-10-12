@@ -111,7 +111,7 @@ class ManualBarcodeRequest(BaseModel):
     barcode: str = Field(..., min_length=4, example="8901058852387")
 
 class CompareRequest(BaseModel):
-    product_ids: List[int] = Field(..., min_items=2, max_items=4)
+    product_ids: List[int] = Field(..., min_length=2, max_length=4)
 
 class CompareResponse(BaseModel):
     products: List[ProductResponse]
@@ -152,3 +152,152 @@ class DashboardResponse(BaseModel):
     weekly_score_trends: List[Dict[str, Any]]
     nutrient_trends: List[Dict[str, Any]]
     healthy_next_step_insight: str
+
+
+# --- Smart Basket & Indian Food Catalogue Schemas ---
+
+class IndianFoodItemResponse(BaseModel):
+    id: int
+    name: str
+    hindi_name: Optional[str] = None
+    category: str
+    is_staple: bool
+    brand: str
+    pack_size: str
+    serving_size: str
+    estimated_price_inr: float
+    price_provenance: str
+    energy_kcal: float
+    protein_g: float
+    fiber_g: float
+    sugars_g: float
+    saturated_fat_g: float
+    sodium_mg: float
+    allergens: List[str]
+    dietary_tags: List[str]
+    description: Optional[str] = None
+    key_benefit: Optional[str] = None
+    data_source: str
+
+
+class SmartBasketPlanRequest(BaseModel):
+    budget_inr: float = Field(default=1000.0, ge=100.0, le=50000.0)
+    primary_goal: str = Field(default="high_protein")  # high_protein, high_fiber, low_sugar, low_sodium, whole_grains, budget_value
+    secondary_goals: Optional[List[str]] = []
+    dietary_preference: str = Field(default="vegetarian")  # vegetarian, vegan, non_vegetarian, jain
+    avoided_ingredients: Optional[List[str]] = []
+    allergies: Optional[List[str]] = []
+    household_size: int = Field(default=2, ge=1, le=12)
+    shopping_duration: str = Field(default="weekly")  # daily, weekly, monthly
+
+
+class ProposedBasketItem(BaseModel):
+    food_item_id: Optional[int] = None
+    name: str
+    hindi_name: Optional[str] = None
+    category: str
+    pack_size: str
+    quantity: int = 1
+    estimated_price_inr: float
+    price_provenance: str
+    is_purchased: bool = False
+    rationale: str
+    nutrition_snapshot: Dict[str, Any]
+
+
+class SmartBasketRecommendationResponse(BaseModel):
+    budget_inr: float
+    total_estimated_cost_inr: float
+    remaining_budget_inr: float
+    item_count: int
+    proposed_items: List[ProposedBasketItem]
+    available_candidates_count: int
+    excluded_candidates_count: int
+    primary_goal: str
+    dietary_preference: str
+    disclaimer: str
+
+
+class ShoppingListItemCreate(BaseModel):
+    food_item_id: Optional[int] = None
+    product_id: Optional[int] = None
+    name: str
+    hindi_name: Optional[str] = None
+    category: str = "General Food"
+    pack_size: str = "1 pack"
+    quantity: int = 1
+    estimated_price_inr: float = 0.0
+    price_provenance: str = "estimated_kirana_index"
+    is_purchased: bool = False
+    notes: Optional[str] = None
+    rationale: Optional[str] = None
+    nutrition_snapshot: Optional[Dict[str, Any]] = {}
+
+
+class ShoppingListItemUpdate(BaseModel):
+    quantity: Optional[int] = None
+    estimated_price_inr: Optional[float] = None
+    is_purchased: Optional[bool] = None
+    notes: Optional[str] = None
+
+
+class ShoppingListItemResponse(BaseModel):
+    id: int
+    list_id: int
+    food_item_id: Optional[int] = None
+    product_id: Optional[int] = None
+    name: str
+    hindi_name: Optional[str] = None
+    category: str
+    pack_size: str
+    quantity: int
+    estimated_price_inr: float
+    price_provenance: str
+    is_purchased: bool
+    notes: Optional[str] = None
+    rationale: Optional[str] = None
+    nutrition_snapshot: Optional[Dict[str, Any]] = {}
+    created_at: datetime
+    updated_at: datetime
+
+
+class ShoppingListCreate(BaseModel):
+    title: str = "My Smart Basket Checklist"
+    budget_inr: float = 1000.0
+    shopping_duration: str = "weekly"
+    household_size: int = 2
+    primary_nutrition_goal: str = "high_protein"
+    secondary_nutrition_goals: Optional[List[str]] = []
+    dietary_preference: str = "vegetarian"
+    avoided_ingredients: Optional[List[str]] = []
+    allergies: Optional[List[str]] = []
+    notes: Optional[str] = None
+    items: List[ShoppingListItemCreate] = []
+
+
+class ShoppingListUpdate(BaseModel):
+    title: Optional[str] = None
+    budget_inr: Optional[float] = None
+    shopping_duration: Optional[str] = None
+    household_size: Optional[int] = None
+    status: Optional[str] = None
+    notes: Optional[str] = None
+
+
+class ShoppingListResponse(BaseModel):
+    id: int
+    user_id: Optional[int] = None
+    title: str
+    budget_inr: float
+    total_estimated_cost_inr: float
+    shopping_duration: str
+    household_size: int
+    primary_nutrition_goal: str
+    secondary_nutrition_goals: List[str]
+    dietary_preference: str
+    status: str
+    notes: Optional[str] = None
+    items: List[ShoppingListItemResponse]
+    created_at: datetime
+    updated_at: datetime
+

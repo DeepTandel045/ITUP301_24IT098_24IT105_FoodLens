@@ -20,11 +20,12 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
   const { user, logout } = useAuth();
 
   const mainNavItems = [
-    { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard, authRequired: true },
+    { id: 'dashboard', label: 'Home', icon: LayoutDashboard, authRequired: true },
+    { id: 'smart_basket', label: 'Smart Basket', icon: ShoppingBag, authRequired: false },
     { id: 'scan', label: 'Scan Food', icon: Scan, authRequired: false },
-    { id: 'history', label: 'History', icon: HistoryIcon, authRequired: true },
+    { id: 'my_lists', label: 'My Lists', icon: Sparkles, authRequired: false },
     { id: 'compare', label: 'Compare', icon: GitCompare, authRequired: true },
-    { id: 'basket', label: 'Basket', icon: ShoppingBag, authRequired: true },
+    { id: 'history', label: 'History', icon: HistoryIcon, authRequired: true },
   ];
 
   const secondaryNavItems = [
@@ -186,9 +187,9 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
       {/* ========================================================================= */}
       {/* MOBILE BOTTOM NAVIGATION BAR (Section 12 & Mockup spec)                    */}
       {/* ========================================================================= */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-[#E5E9E6] px-4 py-2 z-50 flex items-center justify-around shadow-lg">
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-[#E5E9E6] px-3 py-2 z-50 flex items-center justify-around shadow-lg">
         
-        {/* 1. Home / Dashboard */}
+        {/* 1. Home */}
         <button
           onClick={() => setActiveTab(user ? 'dashboard' : 'landing')}
           className={`flex flex-col items-center gap-1 text-[10px] font-bold ${
@@ -199,18 +200,16 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
           <span>Home</span>
         </button>
 
-        {/* 2. History */}
-        {user && (
-          <button
-            onClick={() => setActiveTab('history')}
-            className={`flex flex-col items-center gap-1 text-[10px] font-bold ${
-              activeTab === 'history' ? 'text-[#164B3A]' : 'text-[#5A6561]'
-            }`}
-          >
-            <HistoryIcon className="w-5 h-5" />
-            <span>History</span>
-          </button>
-        )}
+        {/* 2. Smart Basket */}
+        <button
+          onClick={() => setActiveTab('smart_basket')}
+          className={`flex flex-col items-center gap-1 text-[10px] font-bold ${
+            activeTab === 'smart_basket' ? 'text-[#164B3A]' : 'text-[#5A6561]'
+          }`}
+        >
+          <ShoppingBag className="w-5 h-5" />
+          <span>Basket</span>
+        </button>
 
         {/* 3. HERO SCAN CTA BUTTON (Center visually dominant button!) */}
         <button
@@ -223,18 +222,16 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
           <span className="text-[10px] font-black text-[#164B3A] mt-1">Scan</span>
         </button>
 
-        {/* 4. Basket */}
-        {user && (
-          <button
-            onClick={() => setActiveTab('basket')}
-            className={`flex flex-col items-center gap-1 text-[10px] font-bold ${
-              activeTab === 'basket' ? 'text-[#164B3A]' : 'text-[#5A6561]'
-            }`}
-          >
-            <ShoppingBag className="w-5 h-5" />
-            <span>Basket</span>
-          </button>
-        )}
+        {/* 4. My Lists */}
+        <button
+          onClick={() => setActiveTab('my_lists')}
+          className={`flex flex-col items-center gap-1 text-[10px] font-bold ${
+            activeTab === 'my_lists' ? 'text-[#164B3A]' : 'text-[#5A6561]'
+          }`}
+        >
+          <Sparkles className="w-5 h-5" />
+          <span>Lists</span>
+        </button>
 
         {/* 5. Me / Profile */}
         <button

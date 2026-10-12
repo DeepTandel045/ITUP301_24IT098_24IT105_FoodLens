@@ -18,6 +18,7 @@ class User(Base):
     allergies = relationship("Allergy", back_populates="user", cascade="all, delete-orphan")
     scans = relationship("Scan", back_populates="user", cascade="all, delete-orphan")
     baskets = relationship("Basket", back_populates="user", cascade="all, delete-orphan")
+    shopping_lists = relationship("ShoppingList", back_populates="user", cascade="all, delete-orphan")
 
 
 class UserProfile(Base):
@@ -173,3 +174,95 @@ class AIExplanation(Base):
     created_at = Column(DateTime, default=datetime.datetime.utcnow)
 
     scan = relationship("Scan", back_populates="ai_explanations")
+
+
+class IndianFoodItem(Base):
+    """
+    Indian food and grocery catalogue:
+    Covers staples (dal, pulses, millets, whole grains, dairy, seeds)
+    and packaged products with price provenance, nutrition per 100g, and dietary tags.
+    """
+    __tablename__ = "indian_food_items"
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, nullable=False, index=True)
+    hindi_name = Column(String, nullable=True)
+    category = Column(String, nullable=False, index=True)  # pulses_lentils, whole_grains, dairy_alternatives, nuts_seeds, packaged_staples, healthy_snacks
+    is_staple = Column(Boolean, default=True)  # True = ordinary kirana loose staple; False = packaged branded item
+    brand = Column(String, default="Kirana Staple")
+    pack_size = Column(String, default="1 kg")  # e.g., 1 kg, 500 g, 1 Litre, 250 g
+    serving_size = Column(String, default="100g")
+    estimated_price_inr = Column(Float, nullable=False, default=100.0)
+    price_provenance = Column(String, default="estimated_kirana_index_2026")  # estimated_kirana_index_2026, verified_retail_price
+    energy_kcal = Column(Float, nullable=False, default=0.0)
+    protein_g = Column(Float, nullable=False, default=0.0)
+    fiber_g = Column(Float, nullable=False, default=0.0)
+    sugars_g = Column(Float, nullable=False, default=0.0)
+    saturated_fat_g = Column(Float, nullable=False, default=0.0)
+    sodium_mg = Column(Float, nullable=False, default=0.0)
+    allergens = Column(JSON, default=list)  # e.g., ["peanuts"], ["milk"], ["gluten"]
+    dietary_tags = Column(JSON, default=list)  # ["vegetarian", "vegan", "high_protein", "high_fiber", "whole_grain"]
+    description = Column(Text, nullable=True)
+    key_benefit = Column(String, nullable=True)
+    data_source = Column(String, default="IFCT_2017_OpenFoodFacts")
+    created_at = Column(DateTime, default=datetime.datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.datetime.utcnow, onupdate=datetime.datetime.utcnow)
+
+
+class ShoppingList(Base):
+    """
+    Saved Smart Basket shopping plan / interactive checklist.
+    Can be linked to an authenticated user or saved anonymously in guest mode.
+    """
+    __tablename__ = "shopping_lists"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=True, index=True)
+    title = Column(String, default="My Smart Basket Plan", nullable=False)
+    budget_inr = Column(Float, nullable=False, default=1000.0)
+    total_estimated_cost_inr = Column(Float, default=0.0)
+    shopping_duration = Column(String, default="weekly")  # daily, weekly, monthly
+    household_size = Column(Integer, default=2)
+    primary_nutrition_goal = Column(String, default="high_protein")
+    secondary_nutrition_goals = Column(JSON, default=list)
+    dietary_preference = Column(String, default="vegetarian")
+    avoided_ingredients = Column(JSON, default=list)
+    allergies = Column(JSON, default=list)
+    status = Column(String, default="active")  # active, completed, archived
+    notes = Column(Text, nullable=True)
+    created_at = Column(DateTime, default=datetime.datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.datetime.utcnow, onupdate=datetime.datetime.utcnow)
+
+    user = relationship("User", back_populates="shopping_lists")
+    items = relationship("ShoppingListItem", back_populates="shopping_list", cascade="all, delete-orphan")
+
+
+class ShoppingListItem(Base):
+    """
+    Interactive shopping checklist item.
+    Supports checked/purchased state, quantity changes, manual price editing, and custom notes.
+    """
+    __tablename__ = "shopping_list_items"
+
+    id = Column(Integer, primary_key=True, index=True)
+    list_id = Column(Integer, ForeignKey("shopping_lists.id", ondelete="CASCADE"), nullable=False, index=True)
+    food_item_id = Column(Integer, ForeignKey("indian_food_items.id", ondelete="SET NULL"), nullable=True)
+    product_id = Column(Integer, ForeignKey("products.id", ondelete="SET NULL"), nullable=True)
+    name = Column(String, nullable=False)
+    hindi_name = Column(String, nullable=True)
+    category = Column(String, default="General Food")
+    pack_size = Column(String, default="1 pack")
+    quantity = Column(Integer, default=1, nullable=False)
+    estimated_price_inr = Column(Float, nullable=False, default=0.0)
+    price_provenance = Column(String, default="estimated_kirana_index")
+    is_purchased = Column(Boolean, default=False, nullable=False)
+    notes = Column(Text, nullable=True)
+    rationale = Column(String, nullable=True)
+    nutrition_snapshot = Column(JSON, default=dict)
+    created_at = Column(DateTime, default=datetime.datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.datetime.utcnow, onupdate=datetime.datetime.utcnow)
+
+    shopping_list = relationship("ShoppingList", back_populates="items")
+    food_item = relationship("IndianFoodItem")
+    product = relationship("Product")
+

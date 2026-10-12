@@ -10,6 +10,8 @@ import { ScanPage } from './pages/ScanPage';
 import { ProductDetailsPage } from './pages/ProductDetailsPage';
 import { ComparePage } from './pages/ComparePage';
 import { BasketPage } from './pages/BasketPage';
+import { SmartBasketPage } from './pages/SmartBasketPage';
+import { MyListsPage } from './pages/MyListsPage';
 import { HistoryPage } from './pages/HistoryPage';
 import { ProfilePage } from './pages/ProfilePage';
 import type { ScanResult } from './types';
@@ -31,7 +33,7 @@ const MainApp: React.FC = () => {
   React.useEffect(() => {
     if (user && (activeTab === 'landing' || activeTab === 'login' || activeTab === 'register')) {
       setActiveTab('dashboard');
-    } else if (!user && activeTab !== 'landing' && activeTab !== 'login' && activeTab !== 'register' && activeTab !== 'scan') {
+    } else if (!user && activeTab !== 'landing' && activeTab !== 'login' && activeTab !== 'register' && activeTab !== 'scan' && activeTab !== 'smart_basket' && activeTab !== 'my_lists') {
       setActiveTab('landing');
     }
   }, [user]);
@@ -58,6 +60,8 @@ const MainApp: React.FC = () => {
         {activeTab === 'register' && <RegisterPage onNavigate={handleNavigate} />}
         {activeTab === 'onboarding' && <OnboardingPage onNavigate={handleNavigate} />}
         {activeTab === 'dashboard' && <DashboardPage onNavigate={handleNavigate} />}
+        {activeTab === 'smart_basket' && <SmartBasketPage onNavigate={handleNavigate} />}
+        {activeTab === 'my_lists' && <MyListsPage onNavigate={handleNavigate} />}
         {activeTab === 'scan' && <ScanPage onNavigate={handleNavigate} />}
         {activeTab === 'product_details' && selectedScanResult && (
           <ProductDetailsPage scanResult={selectedScanResult} onNavigate={handleNavigate} />

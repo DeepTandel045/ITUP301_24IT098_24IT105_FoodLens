@@ -94,3 +94,118 @@ export interface DashboardData {
   nutrient_trends: { day: string; sugar: number; sodium: number; protein: number }[];
   healthy_next_step_insight: string;
 }
+
+// --- Smart Basket & Indian Food Catalogue Types ---
+
+export interface IndianFoodItem {
+  id: number;
+  name: string;
+  hindi_name?: string | null;
+  category: string;
+  is_staple: boolean;
+  brand: string;
+  pack_size: string;
+  serving_size: string;
+  estimated_price_inr: number;
+  price_provenance: string;
+  energy_kcal: number;
+  protein_g: number;
+  fiber_g: number;
+  sugars_g: number;
+  saturated_fat_g: number;
+  sodium_mg: number;
+  allergens: string[];
+  dietary_tags: string[];
+  description?: string | null;
+  key_benefit?: string | null;
+  data_source: string;
+}
+
+export interface SmartBasketPlanRequest {
+  budget_inr: number;
+  primary_goal: string;
+  secondary_goals?: string[];
+  dietary_preference: string;
+  avoided_ingredients?: string[];
+  allergies?: string[];
+  household_size: number;
+  shopping_duration: string;
+}
+
+export interface ProposedBasketItem {
+  food_item_id?: number | null;
+  name: string;
+  hindi_name?: string | null;
+  category: string;
+  pack_size: string;
+  quantity: number;
+  estimated_price_inr: number;
+  price_provenance: string;
+  is_purchased: boolean;
+  notes?: string;
+  rationale: string;
+  nutrition_snapshot: {
+    energy_kcal?: number;
+    protein_g?: number;
+    fiber_g?: number;
+    sugars_g?: number;
+    sodium_mg?: number;
+  };
+}
+
+export interface SmartBasketRecommendationResponse {
+  budget_inr: number;
+  total_estimated_cost_inr: number;
+  remaining_budget_inr: number;
+  item_count: number;
+  proposed_items: ProposedBasketItem[];
+  available_candidates_count: number;
+  excluded_candidates_count: number;
+  primary_goal: string;
+  dietary_preference: string;
+  disclaimer: string;
+}
+
+export interface ShoppingListItem {
+  id?: number;
+  list_id?: number;
+  food_item_id?: number | null;
+  product_id?: number | null;
+  name: string;
+  hindi_name?: string | null;
+  category: string;
+  pack_size: string;
+  quantity: number;
+  estimated_price_inr: number;
+  price_provenance: string;
+  is_purchased: boolean;
+  notes?: string | null;
+  rationale?: string | null;
+  nutrition_snapshot?: {
+    energy_kcal?: number;
+    protein_g?: number;
+    fiber_g?: number;
+    sugars_g?: number;
+    sodium_mg?: number;
+  };
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface ShoppingList {
+  id: number;
+  user_id?: number | null;
+  title: string;
+  budget_inr: number;
+  total_estimated_cost_inr: number;
+  shopping_duration: string;
+  household_size: number;
+  primary_nutrition_goal: string;
+  secondary_nutrition_goals: string[];
+  dietary_preference: string;
+  status: string;
+  notes?: string | null;
+  items: ShoppingListItem[];
+  created_at: string;
+  updated_at: string;
+}
