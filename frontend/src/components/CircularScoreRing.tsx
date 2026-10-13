@@ -19,27 +19,22 @@ export const CircularScoreRing: React.FC<CircularScoreRingProps> = ({
 }) => {
   const percentage = Math.min(Math.max((score / maxScore) * 100, 0), 100);
   
-  // Controlled semantic scale based on design spec (Section 16)
-  // 80–100 → Green (#164B3A)
-  // 60–79 → Fresh/amber-green (#2D7A5D)
-  // 40–59 → Amber (#F2B84B)
-  // 0–39 → Coral/red (#E8785D)
-  let strokeColor = '#164B3A';
-  let badgeBg = 'bg-[#164B3A] text-white';
-  let statusText = 'EXCELLENT CHOICE';
+  // Semantic scale based on user spec:
+  // >= 75 → Green (#10B981) for Healthy
+  // 50–74 → Yellow/Amber (#F59E0B) for Moderate / Caution
+  // < 50 → Red (#EF4444) for Alert / Concern
+  let strokeColor = '#10B981';
+  let badgeBg = 'bg-[#10B981] text-white';
+  let statusText = 'HEALTHY FIT';
 
-  if (score < 40) {
-    strokeColor = '#E8785D'; // Coral
-    badgeBg = 'bg-[#E8785D] text-white';
+  if (score < 50) {
+    strokeColor = '#EF4444'; // Red for Alert
+    badgeBg = 'bg-[#EF4444] text-white';
     statusText = 'HIGH CONCERN';
-  } else if (score < 60) {
-    strokeColor = '#F2B84B'; // Amber
-    badgeBg = 'bg-[#F2B84B] text-[#17201C]';
-    statusText = 'MODERATE QUALITY';
-  } else if (score < 80) {
-    strokeColor = '#2D7A5D'; // Fresh Amber-Green
-    badgeBg = 'bg-[#DDF3E7] text-[#164B3A] border border-[#164B3A]/20';
-    statusText = 'GOOD CHOICE';
+  } else if (score < 75) {
+    strokeColor = '#F59E0B'; // Yellow/Amber for Moderate
+    badgeBg = 'bg-[#F59E0B] text-white';
+    statusText = 'MODERATE FIT';
   }
 
   const dimensionMap = {
@@ -57,7 +52,7 @@ export const CircularScoreRing: React.FC<CircularScoreRingProps> = ({
     <div className="flex flex-col items-center justify-center text-center">
       
       {goalBadge && (
-        <span className="mb-2 text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-[#164B3A]/10 text-[#164B3A] border border-[#164B3A]/20">
+        <span className="mb-2 text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-[#EEF2FF] text-[#635BFF] border border-[#635BFF]/25">
           🎯 {goalBadge}
         </span>
       )}

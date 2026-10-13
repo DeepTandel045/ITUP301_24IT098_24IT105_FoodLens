@@ -5,20 +5,23 @@
     --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     --font-mono: 'Space Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
     
-    /* Fresh Intelligence + Soft Pop Palette */
-    --color-primary: #164B3A;      /* Deep Forest Green */
-    --color-primary-hover: #0F3629;
-    --color-secondary: #DDF3E7;    /* Fresh Mint */
-    --color-pop-lime: #B9F24A;     /* Soft Pop Lime Accent */
-    --color-pop-pink: #FF6B8A;     /* Soft Pop Coral/Pink Accent */
-    --color-pop-purple: #635BFF;   /* Soft Pop Digital Accent */
-    --color-bg-warm: #F8F8F4;       /* Warm Off-White */
-    --color-surface: #FFFFFF;       /* Pure White Cards */
-    --color-text-main: #17201C;     /* Deep Charcoal */
-    --color-text-muted: #5A6561;    /* Muted Charcoal */
-    --color-warning: #F2B84B;       /* Amber */
-    --color-concern: #E8785D;       /* Coral */
-    --color-border-subtle: #E2E7E3;  /* Subtle Soft Border */
+    /* Soft Pop Digital Community Palette */
+    --color-primary: #635BFF;         /* Vibrant Digital Indigo / Blue */
+    --color-primary-hover: #4E44E6;
+    --color-secondary: #F1F3FE;       /* Soft Periwinkle Tint */
+    --color-pop-lime: #B9F24A;        /* Electric Lime Accent */
+    --color-pop-pink: #FF6B8A;        /* Vibrant Coral / Rose */
+    --color-pop-purple: #635BFF;      /* Digital Indigo */
+    --color-pop-green: #10B981;       /* Emerald Green (Healthy) */
+    --color-pop-red: #EF4444;         /* Vibrant Red (Alert) */
+    --color-pop-yellow: #F59E0B;      /* Warm Amber / Yellow */
+    --color-bg-warm: #F8F9FD;          /* Airy Soft Pop Canvas */
+    --color-surface: #FFFFFF;          /* Pure White Cards */
+    --color-text-main: #17172B;        /* Deep Navy Ink */
+    --color-text-muted: #64748B;       /* Cool Slate Muted */
+    --color-warning: #F59E0B;          /* Amber Yellow */
+    --color-concern: #EF4444;          /* Alert Red */
+    --color-border-subtle: #E2E8F0;     /* Clean Soft Border */
   }
 
   body {
@@ -37,39 +40,52 @@
 /* Premium Soft Pop Card & Surface System */
 .card-fresh {
   background-color: #ffffff;
-  border: 1.5px solid #E8ECE9;
+  border: 1.5px solid #E2E8F0;
   border-radius: 24px;
-  box-shadow: 0 4px 20px -2px rgba(22, 75, 58, 0.04), 0 2px 6px -1px rgba(0, 0, 0, 0.02);
+  box-shadow: 0 4px 20px -2px rgba(99, 91, 255, 0.04), 0 2px 6px -1px rgba(0, 0, 0, 0.02);
   transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .card-fresh:hover {
-  border-color: #164B3A;
-  box-shadow: 0 12px 32px -4px rgba(22, 75, 58, 0.08), 0 4px 12px -2px rgba(0, 0, 0, 0.03);
+  border-color: #635BFF;
+  box-shadow: 0 12px 32px -4px rgba(99, 91, 255, 0.08), 0 4px 12px -2px rgba(0, 0, 0, 0.03);
   transform: translateY(-1px);
 }
 
 .card-mint {
-  background-color: #DDF3E7;
-  border: 1.5px solid rgba(22, 75, 58, 0.15);
+  background-color: #F1F3FE;
+  border: 1.5px solid rgba(99, 91, 255, 0.2);
   border-radius: 24px;
 }
 
 .card-forest {
-  background-color: #164B3A;
+  background: linear-gradient(135deg, #17172B 0%, #201D47 60%, #2E286E 100%);
   color: #ffffff;
+  border: 1px solid rgba(99, 91, 255, 0.25);
   border-radius: 24px;
 }
 
 .card-amber {
   background-color: #FFFBEB;
-  border: 1.5px solid rgba(242, 184, 75, 0.35);
+  border: 1.5px solid rgba(245, 158, 11, 0.3);
   border-radius: 22px;
 }
 
 .card-coral {
-  background-color: #FEF2F2;
-  border: 1.5px solid rgba(232, 120, 93, 0.35);
+  background-color: #FFF1F2;
+  border: 1.5px solid rgba(239, 68, 68, 0.3);
+  border-radius: 22px;
+}
+
+.card-green {
+  background-color: #F0FDF4;
+  border: 1.5px solid rgba(16, 185, 129, 0.3);
+  border-radius: 22px;
+}
+
+.card-blue {
+  background-color: #EEF2FF;
+  border: 1.5px solid rgba(99, 91, 255, 0.3);
   border-radius: 22px;
 }
 
@@ -91,14 +107,14 @@
 }
 
 .pill-pop-mint {
-  background-color: #DDF3E7;
-  color: #164B3A;
-  border-color: rgba(22, 75, 58, 0.25);
+  background-color: #ECFDF5;
+  color: #065F46;
+  border-color: #10B981;
 }
 
 .pill-pop-lime {
   background-color: #F1FCD6;
-  color: #43630A;
+  color: #3F5E06;
   border-color: #B9F24A;
 }
 
@@ -109,28 +125,28 @@
 }
 
 .pill-pop-purple {
-  background-color: #EDEBFD;
-  color: #3830A3;
+  background-color: #EEF2FF;
+  color: #4338CA;
   border-color: #635BFF;
 }
 
 .pill-pop-dark {
-  background-color: #17201C;
+  background-color: #17172B;
   color: #FFFFFF;
-  border-color: #17201C;
+  border-color: #17172B;
 }
 
 /* Typography Gradient & Accents */
 .text-forest {
-  color: #164B3A;
+  color: #635BFF;
 }
 
 .bg-forest {
-  background-color: #164B3A;
+  background-color: #635BFF;
 }
 
 .bg-mint {
-  background-color: #DDF3E7;
+  background-color: #EEF2FF;
 }
 
 /* Custom Scrollbar */
@@ -139,35 +155,40 @@
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #F8F8F4;
+  background: #F8F9FD;
 }
 ::-webkit-scrollbar-thumb {
-  background: #C4D5CB;
+  background: #CBD5E1;
   border-radius: 10px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #164B3A;
+  background: #635BFF;
 }
 
 /* Score Badges & Scale Colors */
 .score-badge-green {
-  background-color: #164B3A;
+  background-color: #10B981;
   color: #FFFFFF;
 }
 
 .score-badge-mint-green {
-  background-color: #DDF3E7;
-  color: #164B3A;
-  border: 1px solid rgba(22, 75, 58, 0.2);
+  background-color: #ECFDF5;
+  color: #065F46;
+  border: 1px solid rgba(16, 185, 129, 0.3);
 }
 
 .score-badge-amber {
-  background-color: #F2B84B;
-  color: #17201C;
+  background-color: #F59E0B;
+  color: #FFFFFF;
 }
 
 .score-badge-coral {
-  background-color: #E8785D;
+  background-color: #EF4444;
+  color: #FFFFFF;
+}
+
+.score-badge-blue {
+  background-color: #635BFF;
   color: #FFFFFF;
 }
 
@@ -180,3 +201,4 @@
 .camera-frame-pulse {
   animation: pulse-subtle 2.5s infinite ease-in-out;
 }
+

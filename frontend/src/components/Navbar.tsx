@@ -37,7 +37,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
       {/* ========================================================================= */}
       {/* DESKTOP LEFT SIDEBAR NAVIGATION (Section 12 spec)                         */}
       {/* ========================================================================= */}
-      <aside className="hidden md:flex flex-col fixed left-0 top-0 bottom-0 w-64 bg-white border-r border-[#E5E9E6] p-6 z-40 justify-between">
+      <aside className="hidden md:flex flex-col fixed left-0 top-0 bottom-0 w-64 bg-white border-r border-[#E2E8F0] p-6 z-40 justify-between">
         
         <div className="space-y-8">
           {/* Brand Logo */}
@@ -45,20 +45,20 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
             onClick={() => setActiveTab(user ? 'dashboard' : 'landing')}
             className="flex items-center gap-3 cursor-pointer group px-2"
           >
-            <div className="w-10 h-10 rounded-2xl bg-[#164B3A] text-white flex items-center justify-center font-extrabold shadow-md group-hover:scale-105 transition-transform">
-              <Sparkles className="w-5 h-5 text-[#DDF3E7]" />
+            <div className="w-10 h-10 rounded-2xl bg-[#635BFF] text-white flex items-center justify-center font-extrabold shadow-md shadow-[#635BFF]/20 group-hover:scale-105 transition-transform">
+              <Sparkles className="w-5 h-5 text-white" />
             </div>
             <div>
-              <span className="text-2xl font-black text-[#164B3A] tracking-tight block">FOODLENS</span>
-              <span className="text-[10px] font-extrabold tracking-wider text-[#5A6561] uppercase block -mt-1">
-                Fresh Intelligence
+              <span className="text-2xl font-black text-[#17172B] tracking-tight block">FOODLENS</span>
+              <span className="text-[10px] font-extrabold tracking-wider text-[#64748B] uppercase block -mt-1">
+                Nutrition Intelligence
               </span>
             </div>
           </div>
 
           {/* Navigation Links */}
           <nav className="space-y-1.5">
-            <span className="text-[10px] font-black uppercase tracking-wider text-[#5A6561] px-3 block mb-2">
+            <span className="text-[10px] font-black uppercase tracking-wider text-[#94A3B8] px-3 block mb-2">
               Menu
             </span>
             {mainNavItems.map((item) => {
@@ -71,18 +71,18 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
                   onClick={() => setActiveTab(item.id)}
                   className={`w-full flex items-center gap-3 px-4 py-3 rounded-[16px] text-sm font-bold transition-all text-left ${
                     isActive
-                      ? 'bg-[#164B3A] text-white shadow-sm'
-                      : 'text-[#5A6561] hover:text-[#17201C] hover:bg-[#F8F8F4]'
+                      ? 'bg-[#635BFF] text-white shadow-md shadow-[#635BFF]/25'
+                      : 'text-[#64748B] hover:text-[#17172B] hover:bg-[#F1F3FE]'
                   }`}
                 >
-                  <Icon className={`w-5 h-5 ${isActive ? 'text-[#DDF3E7]' : 'text-[#5A6561]'}`} />
+                  <Icon className={`w-5 h-5 ${isActive ? 'text-white' : 'text-[#64748B]'}`} />
                   {item.label}
                 </button>
               );
             })}
 
-            <div className="pt-4 border-t border-[#E5E9E6] my-3">
-              <span className="text-[10px] font-black uppercase tracking-wider text-[#5A6561] px-3 block mb-2">
+            <div className="pt-4 border-t border-[#E2E8F0] my-3">
+              <span className="text-[10px] font-black uppercase tracking-wider text-[#94A3B8] px-3 block mb-2">
                 Account
               </span>
               {secondaryNavItems.map((item) => {
@@ -95,11 +95,11 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
                     onClick={() => setActiveTab(item.id)}
                     className={`w-full flex items-center gap-3 px-4 py-3 rounded-[16px] text-sm font-bold transition-all text-left ${
                       isActive
-                        ? 'bg-[#164B3A] text-white shadow-sm'
-                        : 'text-[#5A6561] hover:text-[#17201C] hover:bg-[#F8F8F4]'
+                        ? 'bg-[#635BFF] text-white shadow-md shadow-[#635BFF]/25'
+                        : 'text-[#64748B] hover:text-[#17172B] hover:bg-[#F1F3FE]'
                     }`}
                   >
-                    <Icon className={`w-5 h-5 ${isActive ? 'text-[#DDF3E7]' : 'text-[#5A6561]'}`} />
+                    <Icon className={`w-5 h-5 ${isActive ? 'text-white' : 'text-[#64748B]'}`} />
                     {item.label}
                   </button>
                 );
@@ -110,17 +110,17 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
 
         {/* User Card at Bottom of Sidebar */}
         {user ? (
-          <div className="pt-4 border-t border-[#E5E9E6] space-y-3">
+          <div className="pt-4 border-t border-[#E2E8F0] space-y-3">
             <div 
               onClick={() => setActiveTab('profile')}
-              className="flex items-center gap-3 p-2.5 rounded-[16px] hover:bg-[#F8F8F4] cursor-pointer transition-colors"
+              className="flex items-center gap-3 p-2.5 rounded-[16px] hover:bg-[#F1F3FE] cursor-pointer transition-colors"
             >
-              <div className="w-9 h-9 rounded-full bg-[#164B3A] text-white flex items-center justify-center font-black text-sm">
+              <div className="w-9 h-9 rounded-full bg-[#635BFF] text-white flex items-center justify-center font-black text-sm shadow-xs">
                 {user.name.charAt(0).toUpperCase()}
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-xs font-bold text-[#17201C] truncate">{user.name}</p>
-                <p className="text-[10px] font-semibold text-[#164B3A] bg-[#DDF3E7] px-2 py-0.5 rounded-full inline-block mt-0.5 uppercase tracking-wider">
+                <p className="text-xs font-bold text-[#17172B] truncate">{user.name}</p>
+                <p className="text-[10px] font-semibold text-[#635BFF] bg-[#EEF2FF] px-2 py-0.5 rounded-full inline-block mt-0.5 uppercase tracking-wider">
                   {user.dietary_goal ? user.dietary_goal.replace('_', ' ') : 'Healthy Plan'}
                 </p>
               </div>
@@ -128,22 +128,22 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
 
             <button
               onClick={logout}
-              className="w-full flex items-center justify-center gap-2 py-2.5 rounded-[14px] text-xs font-bold text-[#E8785D] hover:bg-[#FEF2F2] transition-colors"
+              className="w-full flex items-center justify-center gap-2 py-2.5 rounded-[14px] text-xs font-bold text-[#EF4444] hover:bg-[#FFF1F2] transition-colors"
             >
               <LogOut className="w-4 h-4" /> Sign Out
             </button>
           </div>
         ) : (
-          <div className="space-y-2 pt-4 border-t border-[#E5E9E6]">
+          <div className="space-y-2 pt-4 border-t border-[#E2E8F0]">
             <button
               onClick={() => setActiveTab('login')}
-              className="w-full py-3 rounded-[16px] text-sm font-bold text-[#164B3A] bg-[#DDF3E7] hover:bg-[#c9ead8] transition-colors"
+              className="w-full py-3 rounded-[16px] text-sm font-bold text-[#635BFF] bg-[#EEF2FF] hover:bg-[#E0E7FF] transition-colors"
             >
               Sign In
             </button>
             <button
               onClick={() => setActiveTab('register')}
-              className="w-full py-3 rounded-[16px] text-sm font-extrabold text-white bg-[#164B3A] hover:bg-[#0F3629] transition-colors shadow-md"
+              className="w-full py-3 rounded-[16px] text-sm font-extrabold text-white bg-[#635BFF] hover:bg-[#4E44E6] transition-colors shadow-md shadow-[#635BFF]/25"
             >
               Get Started
             </button>
@@ -154,22 +154,22 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
       {/* ========================================================================= */}
       {/* MOBILE TOP HEADER BAR                                                      */}
       {/* ========================================================================= */}
-      <header className="md:hidden sticky top-0 bg-white border-b border-[#E5E9E6] px-4 py-3 z-40 flex items-center justify-between shadow-xs">
+      <header className="md:hidden sticky top-0 bg-white border-b border-[#E2E8F0] px-4 py-3 z-40 flex items-center justify-between shadow-xs">
         <div 
           onClick={() => setActiveTab(user ? 'dashboard' : 'landing')}
           className="flex items-center gap-2 cursor-pointer"
         >
-          <div className="w-8 h-8 rounded-xl bg-[#164B3A] text-white flex items-center justify-center font-extrabold text-xs">
-            <Sparkles className="w-4 h-4 text-[#DDF3E7]" />
+          <div className="w-8 h-8 rounded-xl bg-[#635BFF] text-white flex items-center justify-center font-extrabold text-xs shadow-xs">
+            <Sparkles className="w-4 h-4 text-white" />
           </div>
-          <span className="text-xl font-black text-[#164B3A] tracking-tight">FOODLENS</span>
+          <span className="text-xl font-black text-[#17172B] tracking-tight">FOODLENS</span>
         </div>
 
         {user ? (
           <div className="flex items-center gap-2">
             <button 
               onClick={() => setActiveTab('profile')}
-              className="w-8 h-8 rounded-full bg-[#164B3A] text-white flex items-center justify-center font-bold text-xs"
+              className="w-8 h-8 rounded-full bg-[#635BFF] text-white flex items-center justify-center font-bold text-xs"
             >
               {user.name.charAt(0).toUpperCase()}
             </button>
@@ -177,7 +177,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
         ) : (
           <button
             onClick={() => setActiveTab('login')}
-            className="text-xs font-bold text-[#164B3A] bg-[#DDF3E7] px-3 py-1.5 rounded-full"
+            className="text-xs font-bold text-[#635BFF] bg-[#EEF2FF] px-3.5 py-1.5 rounded-full"
           >
             Sign In
           </button>
@@ -185,15 +185,15 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
       </header>
 
       {/* ========================================================================= */}
-      {/* MOBILE BOTTOM NAVIGATION BAR (Section 12 & Mockup spec)                    */}
+      {/* MOBILE BOTTOM NAVIGATION BAR                                              */}
       {/* ========================================================================= */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-[#E5E9E6] px-3 py-2 z-50 flex items-center justify-around shadow-lg">
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-[#E2E8F0] px-3 py-2 z-50 flex items-center justify-around shadow-lg">
         
         {/* 1. Home */}
         <button
           onClick={() => setActiveTab(user ? 'dashboard' : 'landing')}
           className={`flex flex-col items-center gap-1 text-[10px] font-bold ${
-            activeTab === 'dashboard' || activeTab === 'landing' ? 'text-[#164B3A]' : 'text-[#5A6561]'
+            activeTab === 'dashboard' || activeTab === 'landing' ? 'text-[#635BFF]' : 'text-[#64748B]'
           }`}
         >
           <LayoutDashboard className="w-5 h-5" />
@@ -204,7 +204,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
         <button
           onClick={() => setActiveTab('smart_basket')}
           className={`flex flex-col items-center gap-1 text-[10px] font-bold ${
-            activeTab === 'smart_basket' ? 'text-[#164B3A]' : 'text-[#5A6561]'
+            activeTab === 'smart_basket' ? 'text-[#635BFF]' : 'text-[#64748B]'
           }`}
         >
           <ShoppingBag className="w-5 h-5" />
@@ -216,17 +216,17 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
           onClick={() => setActiveTab('scan')}
           className="flex flex-col items-center justify-center -mt-5"
         >
-          <div className="w-14 h-14 rounded-full bg-[#164B3A] text-white flex items-center justify-center shadow-lg ring-4 ring-[#F8F8F4] active:scale-95 transition-transform">
-            <Scan className="w-7 h-7 text-[#DDF3E7]" />
+          <div className="w-14 h-14 rounded-full bg-[#635BFF] text-white flex items-center justify-center shadow-lg shadow-[#635BFF]/30 ring-4 ring-[#F8F9FD] active:scale-95 transition-transform">
+            <Scan className="w-7 h-7 text-white" />
           </div>
-          <span className="text-[10px] font-black text-[#164B3A] mt-1">Scan</span>
+          <span className="text-[10px] font-black text-[#635BFF] mt-1">Scan</span>
         </button>
 
         {/* 4. My Lists */}
         <button
           onClick={() => setActiveTab('my_lists')}
           className={`flex flex-col items-center gap-1 text-[10px] font-bold ${
-            activeTab === 'my_lists' ? 'text-[#164B3A]' : 'text-[#5A6561]'
+            activeTab === 'my_lists' ? 'text-[#635BFF]' : 'text-[#64748B]'
           }`}
         >
           <Sparkles className="w-5 h-5" />
@@ -237,7 +237,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
         <button
           onClick={() => setActiveTab(user ? 'profile' : 'login')}
           className={`flex flex-col items-center gap-1 text-[10px] font-bold ${
-            activeTab === 'profile' || activeTab === 'login' ? 'text-[#164B3A]' : 'text-[#5A6561]'
+            activeTab === 'profile' || activeTab === 'login' ? 'text-[#635BFF]' : 'text-[#64748B]'
           }`}
         >
           <UserIcon className="w-5 h-5" />

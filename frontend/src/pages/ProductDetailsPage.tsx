@@ -103,7 +103,7 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({ scanResu
       {/* Navigation Top */}
       <button
         onClick={() => onNavigate('scan')}
-        className="flex items-center gap-2 text-xs font-extrabold text-[#164B3A] hover:underline"
+        className="flex items-center gap-2 text-xs font-extrabold text-[#635BFF] hover:underline cursor-pointer"
       >
         <ArrowLeft className="w-4 h-4" /> Back to Scanner
       </button>
@@ -113,26 +113,26 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({ scanResu
         <div className="flex flex-col sm:flex-row items-center gap-6 text-center sm:text-left">
           
           {/* Large Product Image (Section 15 spec) */}
-          <div className="w-32 h-32 sm:w-40 sm:h-40 rounded-[20px] bg-[#F8F8F4] border border-[#E5E9E6] flex items-center justify-center overflow-hidden shrink-0 shadow-sm p-3">
+          <div className="w-32 h-32 sm:w-40 sm:h-40 rounded-[20px] bg-[#F8F9FD] border border-[#E2E8F0] flex items-center justify-center overflow-hidden shrink-0 shadow-sm p-3">
             {product.image_url ? (
               <img src={product.image_url} alt={product.name} className="w-full h-full object-contain" />
             ) : (
-              <Package className="w-16 h-16 text-[#164B3A]/30" />
+              <Package className="w-16 h-16 text-[#635BFF]/30" />
             )}
           </div>
 
           <div className="space-y-2">
             <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2">
-              <span className="text-[10px] font-extrabold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-[#164B3A] text-white">
+              <span className="text-[10px] font-extrabold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-[#635BFF] text-white">
                 {product.brand || 'KIND'}
               </span>
-              <span className="text-[10px] font-extrabold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-[#DDF3E7] text-[#164B3A] border border-[#164B3A]/20">
+              <span className="text-[10px] font-extrabold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-[#EEF2FF] text-[#635BFF] border border-[#635BFF]/20">
                 Source: {product.data_source || 'Open Food Facts'}
               </span>
             </div>
 
-            <h1 className="text-2xl sm:text-3xl font-black text-[#17201C] tracking-tight">{product.name}</h1>
-            <p className="text-xs text-[#5A6561] font-semibold">Category: {product.category}</p>
+            <h1 className="text-2xl sm:text-3xl font-black text-[#17172B] tracking-tight">{product.name}</h1>
+            <p className="text-xs text-[#64748B] font-semibold">Category: {product.category}</p>
           </div>
         </div>
 
@@ -140,21 +140,21 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({ scanResu
         <div className="flex flex-wrap gap-3 w-full md:w-auto">
           <button
             onClick={handleAddToBasket}
-            className={`flex-1 md:flex-none px-5 py-3.5 rounded-[18px] font-extrabold text-xs flex items-center justify-center gap-2 transition-all shadow-md ${
+            className={`flex-1 md:flex-none px-5 py-3.5 rounded-[18px] font-extrabold text-xs flex items-center justify-center gap-2 transition-all shadow-md cursor-pointer ${
               addedToBasket
-                ? 'bg-[#164B3A] text-white'
-                : 'bg-[#164B3A] text-white hover:bg-[#0F3629]'
+                ? 'bg-[#10B981] text-white shadow-[#10B981]/25'
+                : 'bg-[#635BFF] text-white hover:bg-[#4E44E6] shadow-[#635BFF]/25'
             }`}
           >
-            <ShoppingBag className="w-4 h-4 text-[#DDF3E7]" />
+            <ShoppingBag className="w-4 h-4 text-white" />
             {addedToBasket ? 'Added to Basket!' : 'Add to Basket'}
           </button>
 
           <button
             onClick={() => onNavigate('compare')}
-            className="flex-1 md:flex-none px-5 py-3.5 rounded-[18px] font-extrabold text-xs bg-[#DDF3E7] text-[#164B3A] hover:bg-[#cbebd9] flex items-center justify-center gap-2"
+            className="flex-1 md:flex-none px-5 py-3.5 rounded-[18px] font-extrabold text-xs bg-[#EEF2FF] text-[#635BFF] hover:bg-[#E0E7FF] flex items-center justify-center gap-2 cursor-pointer transition-colors"
           >
-            <GitCompare className="w-4 h-4 text-[#164B3A]" /> Compare
+            <GitCompare className="w-4 h-4 text-[#635BFF]" /> Compare
           </button>
         </div>
       </div>
@@ -164,18 +164,18 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({ scanResu
         
         {/* General Score */}
         <div className="card-fresh p-6 sm:p-8 space-y-4 text-center flex flex-col items-center justify-center">
-          <span className="text-xs font-black uppercase tracking-wider text-[#5A6561]">
+          <span className="text-xs font-black uppercase tracking-wider text-[#64748B]">
             General FoodLens Score
           </span>
           <CircularScoreRing score={score.general_score} size="lg" />
-          <p className="text-xs text-[#5A6561] font-medium leading-relaxed max-w-xs">
+          <p className="text-xs text-[#64748B] font-medium leading-relaxed max-w-xs">
             Standard baseline nutritional quality based on WHO nutrient profiling guidelines.
           </p>
         </div>
 
         {/* Personalized Score (Section 7 spec: Visually different + Goal oriented) */}
-        <div className="card-mint p-6 sm:p-8 space-y-4 text-center flex flex-col items-center justify-center border-2 border-[#164B3A]/20 relative shadow-sm">
-          <span className="text-xs font-black uppercase tracking-wider text-[#164B3A]">
+        <div className="card-fresh p-6 sm:p-8 space-y-4 text-center flex flex-col items-center justify-center border-2 border-[#635BFF]/25 bg-gradient-to-b from-white to-[#F8F9FD] relative shadow-sm">
+          <span className="text-xs font-black uppercase tracking-wider text-[#635BFF]">
             Your Personalized Score
           </span>
           
@@ -185,32 +185,32 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({ scanResu
             goalBadge={score.goal_type ? score.goal_type.replace('_', ' ').toUpperCase() : 'Diabetes-Oriented'} 
           />
 
-          <p className="text-xs text-[#17201C] font-semibold leading-relaxed max-w-xs">
+          <p className="text-xs text-[#17172B] font-semibold leading-relaxed max-w-xs">
             Adjusted specifically for your selected health goal and allergy exclusions.
           </p>
         </div>
 
       </div>
 
-      {/* 3. QUICK NUTRITION PILLS (Soft Pop Cards & Space Mono Numbers) */}
+      {/* 3. QUICK NUTRITION PILLS (Red for Sugar concern, Green for Protein, Yellow for Sodium) */}
       <div className="card-fresh p-6 space-y-3">
-        <h3 className="text-xs font-black text-[#5A6561] uppercase tracking-wider">Nutrition Highlights</h3>
+        <h3 className="text-xs font-black text-[#64748B] uppercase tracking-wider">Nutrition Highlights</h3>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
-          <div className="p-3.5 rounded-[20px] bg-[#F8F8F4] border-1.5 border-[#E5E9E6] hover:border-[#164B3A]/30 transition-all">
-            <span className="text-[10px] text-[#5A6561] font-bold block uppercase tracking-wider">Energy</span>
-            <strong className="text-base text-[#17201C] font-mono-code font-black block mt-0.5">{product.nutrition?.energy_kcal ?? 220} kcal</strong>
+          <div className="p-3.5 rounded-[20px] bg-[#F8F9FD] border-1.5 border-[#E2E8F0] hover:border-[#635BFF]/30 transition-all">
+            <span className="text-[10px] text-[#64748B] font-bold block uppercase tracking-wider">Energy</span>
+            <strong className="text-base text-[#17172B] font-mono-code font-black block mt-0.5">{product.nutrition?.energy_kcal ?? 220} kcal</strong>
           </div>
-          <div className="p-3.5 rounded-[20px] bg-[#FEF2F2] border-1.5 border-[#E8785D]/30 hover:border-[#E8785D] transition-all">
-            <span className="text-[10px] text-[#E8785D] font-bold block uppercase tracking-wider">Sugars</span>
-            <strong className="text-base text-[#E8785D] font-mono-code font-black block mt-0.5">{product.nutrition?.sugars_g ?? 8}g</strong>
+          <div className="p-3.5 rounded-[20px] bg-[#FFF1F2] border-1.5 border-[#EF4444]/30 hover:border-[#EF4444] transition-all">
+            <span className="text-[10px] text-[#EF4444] font-bold block uppercase tracking-wider">Sugars</span>
+            <strong className="text-base text-[#EF4444] font-mono-code font-black block mt-0.5">{product.nutrition?.sugars_g ?? 8}g</strong>
           </div>
-          <div className="p-3.5 rounded-[20px] bg-[#DDF3E7] border-1.5 border-[#164B3A]/25 hover:border-[#164B3A] transition-all">
-            <span className="text-[10px] text-[#164B3A] font-bold block uppercase tracking-wider">Protein</span>
-            <strong className="text-base text-[#164B3A] font-mono-code font-black block mt-0.5">{product.nutrition?.protein_g ?? 20}g</strong>
+          <div className="p-3.5 rounded-[20px] bg-[#ECFDF5] border-1.5 border-[#10B981]/30 hover:border-[#10B981] transition-all">
+            <span className="text-[10px] text-[#10B981] font-bold block uppercase tracking-wider">Protein</span>
+            <strong className="text-base text-[#10B981] font-mono-code font-black block mt-0.5">{product.nutrition?.protein_g ?? 20}g</strong>
           </div>
-          <div className="p-3.5 rounded-[20px] bg-[#F8F8F4] border-1.5 border-[#E5E9E6] hover:border-[#164B3A]/30 transition-all">
-            <span className="text-[10px] text-[#5A6561] font-bold block uppercase tracking-wider">Sodium</span>
-            <strong className="text-base text-[#17201C] font-mono-code font-black block mt-0.5">{product.nutrition?.sodium_mg ?? 140}mg</strong>
+          <div className="p-3.5 rounded-[20px] bg-[#FFFBEB] border-1.5 border-[#F59E0B]/30 hover:border-[#F59E0B] transition-all">
+            <span className="text-[10px] text-[#D97706] font-bold block uppercase tracking-wider">Sodium</span>
+            <strong className="text-base text-[#D97706] font-mono-code font-black block mt-0.5">{product.nutrition?.sodium_mg ?? 140}mg</strong>
           </div>
         </div>
       </div>
@@ -221,51 +221,53 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({ scanResu
         "Our score isn't generated randomly by AI. It is calculated by our deterministic scoring engine,
         and the UI exposes the factors contributing to the score."
       */}
+      {/* 4. "WHY THIS SCORE?" SCORING ENGINE BREAKDOWN (Section 6 & 17 spec) */}
       <div className="card-fresh p-6 sm:p-8 space-y-6">
         <div className="flex items-center justify-between">
           <div>
-            <h3 className="text-lg font-black text-[#17201C]">Why did you score {score.personalized_score}?</h3>
-            <p className="text-xs text-[#5A6561] font-semibold">Transparent breakdown from FoodLens scoring algorithm</p>
+            <h3 className="text-lg font-black text-[#17172B]">Why did you score {score.personalized_score}?</h3>
+            <p className="text-xs text-[#64748B] font-semibold">Transparent breakdown from FoodLens scoring algorithm</p>
           </div>
-          <span className="text-xs font-black text-[#164B3A] bg-[#DDF3E7] px-3 py-1 rounded-full">
+          <span className="text-xs font-black text-[#635BFF] bg-[#EEF2FF] border border-[#635BFF]/20 px-3 py-1 rounded-full">
             Deterministic Engine
           </span>
         </div>
 
         <div className="space-y-3">
-          {/* Positive Factors */}
+          {/* Positive Factors (GREEN for healthy) */}
           {score.breakdown?.positive.map((pos, idx) => (
-            <div key={`p-${idx}`} className="p-4 rounded-[16px] bg-[#DDF3E7]/60 border border-[#164B3A]/20 flex items-center justify-between text-xs text-[#17201C]">
+            <div key={`p-${idx}`} className="p-4 rounded-[16px] bg-[#ECFDF5] border border-[#10B981]/30 flex items-center justify-between text-xs text-[#065F46]">
               <div className="flex items-center gap-2 font-bold">
-                <CheckCircle2 className="w-4 h-4 text-[#164B3A]" />
+                <CheckCircle2 className="w-4 h-4 text-[#10B981]" />
                 <span>{pos.factor}</span>
               </div>
-              <span className="font-extrabold text-[#164B3A] bg-[#164B3A]/10 px-2.5 py-0.5 rounded-full">
+              <span className="font-extrabold text-[#10B981] bg-[#10B981]/10 px-2.5 py-0.5 rounded-full">
                 +{pos.impact || 8}
               </span>
             </div>
           ))}
 
-          {/* Negative / Goal Warnings */}
+          {/* Negative / Goal Warnings (RED for alert) */}
           {score.breakdown?.goal_warnings.map((warn, idx) => (
-            <div key={`w-${idx}`} className="p-4 rounded-[16px] bg-[#FEF2F2] border border-[#E8785D]/30 flex items-center justify-between text-xs text-[#17201C]">
-              <div className="flex items-center gap-2 font-bold text-[#E8785D]">
+            <div key={`w-${idx}`} className="p-4 rounded-[16px] bg-[#FFF1F2] border border-[#EF4444]/30 flex items-center justify-between text-xs text-[#991B1B]">
+              <div className="flex items-center gap-2 font-bold text-[#EF4444]">
                 <ShieldAlert className="w-4 h-4 shrink-0" />
                 <span>{warn.factor} — {warn.detail}</span>
               </div>
-              <span className="font-extrabold text-[#E8785D] bg-[#E8785D]/10 px-2.5 py-0.5 rounded-full">
+              <span className="font-extrabold text-[#EF4444] bg-[#EF4444]/10 px-2.5 py-0.5 rounded-full">
                 -{Math.abs(warn.impact) || 12}
               </span>
             </div>
           ))}
 
+          {/* General Negative Factors (YELLOW for caution) */}
           {score.breakdown?.negative.map((neg, idx) => (
-            <div key={`n-${idx}`} className="p-4 rounded-[16px] bg-[#FFFBEB] border border-[#F2B84B]/30 flex items-center justify-between text-xs text-[#17201C]">
+            <div key={`n-${idx}`} className="p-4 rounded-[16px] bg-[#FFFBEB] border border-[#F59E0B]/30 flex items-center justify-between text-xs text-[#92400E]">
               <div className="flex items-center gap-2 font-bold text-[#D97706]">
                 <AlertTriangle className="w-4 h-4 shrink-0" />
                 <span>{neg.factor}</span>
               </div>
-              <span className="font-extrabold text-[#D97706] bg-[#F2B84B]/20 px-2.5 py-0.5 rounded-full">
+              <span className="font-extrabold text-[#D97706] bg-[#F59E0B]/20 px-2.5 py-0.5 rounded-full">
                 -{Math.abs(neg.impact) || 10}
               </span>
             </div>
@@ -273,10 +275,10 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({ scanResu
         </div>
       </div>
 
-      {/* 5. ✦ FOODLENS INSIGHT CARD (Section 9 spec - NOT ChatGPT chatbot!) */}
+      {/* 5. ✦ FOODLENS INSIGHT CARD */}
       <div className="card-forest p-6 sm:p-8 space-y-3 relative shadow-xl">
-        <div className="flex items-center gap-2 text-[#DDF3E7] font-black text-sm uppercase tracking-wider">
-          <Sparkles className="w-5 h-5 text-[#DDF3E7]" /> ✦ FoodLens Insight
+        <div className="flex items-center gap-2 text-[#B9F24A] font-black text-sm uppercase tracking-wider">
+          <Sparkles className="w-5 h-5 text-[#B9F24A]" /> ✦ FoodLens Insight
         </div>
         <p className="text-white text-sm leading-relaxed font-medium">
           {score.ai_explanation || "This product is a decent protein option, but its sugar content lowers its suitability for your selected goal. Consider a similar product with less sugar and more fiber."}
@@ -286,36 +288,36 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({ scanResu
       {/* 6. INGREDIENT INTELLIGENCE UI (Section 8 spec) */}
       <div className="card-fresh p-6 sm:p-8 space-y-6">
         <div>
-          <h3 className="text-lg font-black text-[#17201C] uppercase tracking-wider">
+          <h3 className="text-lg font-black text-[#17172B] uppercase tracking-wider">
             Ingredient Intelligence
           </h3>
-          <p className="text-xs text-[#5A6561] font-semibold">
+          <p className="text-xs text-[#64748B] font-semibold">
             Click any ingredient to view plain-language INS explanations & profile impacts
           </p>
         </div>
 
-        <div className="divide-y divide-[#E5E9E6]">
+        <div className="divide-y divide-[#E2E8F0]">
           {parsedIngredients.map((item, idx) => (
             <div
               key={idx}
               onClick={() => setSelectedIngredient(item)}
-              className="py-4 flex items-center justify-between cursor-pointer group hover:px-2 hover:bg-[#F8F8F4] rounded-xl transition-all"
+              className="py-4 flex items-center justify-between cursor-pointer group hover:px-2 hover:bg-[#F8F9FD] rounded-xl transition-all"
             >
               <div className="space-y-0.5">
                 <div className="flex items-center gap-2">
-                  <span className="text-sm font-extrabold text-[#17201C] group-hover:text-[#164B3A] transition-colors">
+                  <span className="text-sm font-extrabold text-[#17172B] group-hover:text-[#635BFF] transition-colors">
                     {item.name}
                   </span>
                   {item.isConcern && (
-                    <span className="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-[#FEF2F2] text-[#E8785D]">
+                    <span className="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-[#FFF1F2] text-[#EF4444] border border-[#EF4444]/20">
                       ⚠ Important for your goal
                     </span>
                   )}
                 </div>
-                <p className="text-xs text-[#5A6561] font-medium">{item.category}</p>
+                <p className="text-xs text-[#64748B] font-medium">{item.category}</p>
               </div>
 
-              <span className="text-xs font-bold text-[#164B3A] flex items-center gap-1 opacity-80 group-hover:opacity-100">
+              <span className="text-xs font-bold text-[#635BFF] flex items-center gap-1 opacity-80 group-hover:opacity-100">
                 <Info className="w-4 h-4" /> Learn more
               </span>
             </div>
@@ -327,39 +329,39 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({ scanResu
       {alternatives.length > 0 && (
         <div className="card-fresh p-6 sm:p-8 space-y-6">
           <div>
-            <h3 className="text-lg font-black text-[#17201C] tracking-tight uppercase">
+            <h3 className="text-lg font-black text-[#17172B] tracking-tight uppercase">
               Better Matches For You
             </h3>
-            <p className="text-xs text-[#5A6561] font-semibold">
+            <p className="text-xs text-[#64748B] font-semibold">
               Healthier alternative options matching your profile
             </p>
           </div>
 
           <div className="grid sm:grid-cols-2 gap-4">
             {alternatives.map((alt) => (
-              <div key={alt.id} className="card-mint p-5 space-y-3">
+              <div key={alt.id} className="p-5 rounded-2xl bg-[#F0FDF4] border border-[#10B981]/30 space-y-3">
                 <div className="flex justify-between items-start">
                   <div>
-                    <h4 className="font-extrabold text-[#17201C] text-base">{alt.name}</h4>
-                    <p className="text-xs text-[#5A6561] font-medium">{alt.brand}</p>
+                    <h4 className="font-extrabold text-[#17172B] text-base">{alt.name}</h4>
+                    <p className="text-xs text-[#64748B] font-medium">{alt.brand}</p>
                   </div>
-                  <span className="px-3 py-1 rounded-full bg-[#164B3A] text-white font-black text-xs">
+                  <span className="px-3 py-1 rounded-full bg-[#10B981] text-white font-black text-xs shadow-xs">
                     Score: 84
                   </span>
                 </div>
 
-                <div className="flex flex-wrap gap-2 text-[11px] font-extrabold text-[#164B3A]">
-                  <span className="px-2.5 py-1 rounded-full bg-white border border-[#164B3A]/20">
+                <div className="flex flex-wrap gap-2 text-[11px] font-extrabold text-[#065F46]">
+                  <span className="px-2.5 py-1 rounded-full bg-white border border-[#10B981]/30">
                     -10g sugar
                   </span>
-                  <span className="px-2.5 py-1 rounded-full bg-white border border-[#164B3A]/20">
+                  <span className="px-2.5 py-1 rounded-full bg-white border border-[#10B981]/30">
                     +3g fiber
                   </span>
                 </div>
 
                 <button 
                   onClick={() => onNavigate('scan')}
-                  className="w-full py-2.5 rounded-[12px] font-extrabold bg-[#164B3A] text-white text-xs hover:bg-[#0F3629] transition-colors"
+                  className="w-full py-2.5 rounded-[12px] font-extrabold bg-[#635BFF] text-white text-xs hover:bg-[#4E44E6] transition-colors shadow-xs cursor-pointer"
                 >
                   Why this is better
                 </button>

@@ -84,14 +84,43 @@ export interface BasketAnalysis {
   ai_basket_recommendation: string;
 }
 
+export interface DashboardProfileNeeds {
+  goal_key: string;
+  goal_title: string;
+  primary_metric: string;
+  metric_unit: string;
+  target_guideline: string;
+  allergies: string[];
+  preferences: string[];
+  weekly_total_scans: number;
+  weekly_avg_score?: number | null;
+  total_scans_all_time: number;
+}
+
 export interface DashboardData {
   user_name: string;
   dietary_goal: string;
   today_scans_count: number;
   average_today_score: number;
+  score_change_from_yesterday?: number | null;
+  timeframe_label?: string;
+  profile_needs?: DashboardProfileNeeds;
   recent_scans: ScanResult[];
-  weekly_score_trends: { day: string; general_score: number; personalized_score: number }[];
-  nutrient_trends: { day: string; sugar: number; sodium: number; protein: number }[];
+  weekly_score_trends: { 
+    day: string; 
+    date?: string; 
+    general_score: number | null; 
+    personalized_score: number | null;
+    scans_count?: number;
+  }[];
+  nutrient_trends: { 
+    day: string; 
+    date?: string; 
+    sugar: number; 
+    sodium: number; 
+    protein: number;
+    scans_count?: number;
+  }[];
   healthy_next_step_insight: string;
 }
 

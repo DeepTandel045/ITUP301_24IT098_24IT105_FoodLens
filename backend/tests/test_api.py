@@ -35,3 +35,23 @@ def test_user_registration_and_login():
     assert res_log.status_code == 200
     token = res_log.json()["access_token"]
     assert token is not None
+
+def test_dashboard_real_data_endpoint():
+    # Login as pytest user
+    res_log = client.post("/api/auth/login", json={"email": "test_user_pytest@foodlens.com", "password": "testpassword123"})
+    assert res_log.status_code == 200
+    token = res_log.json()["access_token"]
+    headers = {"Authorization": f"Bearer {token}"}
+
+    res_dash = client.get("/api/dashboard", headers=headers)
+    assert res_dash.status_code == 200
+    dash_data = res_dash.json()
+
+    assert "weekly_score_trends" in dash_data
+    assert len(dash_data["weekly_score_trends"]) == 7
+    assert "nutrient_trends" in dash_data
+    assert len(dash_data["nutrient_trends"]) == 7
+    assert "profile_needs" in dash_data
+    assert dash_data["profile_needs"]["goal_title"] is not None
+    assert "timeframe_label" in dash_data
+    assert isinstance(dash_data["today_scans_count"], int)

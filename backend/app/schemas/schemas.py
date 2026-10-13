@@ -143,11 +143,26 @@ class BasketAnalysisResponse(BaseModel):
 
 # --- Dashboard Schemas ---
 
+class DashboardProfileNeeds(BaseModel):
+    goal_key: str
+    goal_title: str
+    primary_metric: str
+    metric_unit: str
+    target_guideline: str
+    allergies: List[str] = []
+    preferences: List[str] = []
+    weekly_total_scans: int = 0
+    weekly_avg_score: Optional[float] = None
+    total_scans_all_time: int = 0
+
 class DashboardResponse(BaseModel):
     user_name: str
     dietary_goal: str
     today_scans_count: int
     average_today_score: float
+    score_change_from_yesterday: Optional[float] = None
+    timeframe_label: Optional[str] = "Past 7 Days"
+    profile_needs: Optional[DashboardProfileNeeds] = None
     recent_scans: List[ScanResponse]
     weekly_score_trends: List[Dict[str, Any]]
     nutrient_trends: List[Dict[str, Any]]
