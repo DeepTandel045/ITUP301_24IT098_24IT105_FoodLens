@@ -212,10 +212,10 @@ export const SmartBasketPage: React.FC<SmartBasketPageProps> = ({ onNavigate }) 
       {/* 1. Header & Vision Statement */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div className="space-y-1">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#EEF2FF] text-[#635BFF] text-xs font-black uppercase tracking-wider border border-[#635BFF]/20">
-            <Sparkles className="w-3.5 h-3.5" /> Decision-Support System
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 text-slate-700 text-xs font-black uppercase tracking-wider border border-slate-200">
+            <Sparkles className="w-3.5 h-3.5 text-emerald-600" /> Decision-Support System
           </div>
-          <h1 className="text-2xl sm:text-3xl font-black text-[#17172B] tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-black text-[#18181B] tracking-tight">
             Smart Basket Grocery Planner
           </h1>
           <p className="text-xs text-[#64748B] font-semibold max-w-xl">
@@ -225,9 +225,9 @@ export const SmartBasketPage: React.FC<SmartBasketPageProps> = ({ onNavigate }) 
 
         <button
           onClick={() => onNavigate('my_lists')}
-          className="px-4 py-2.5 rounded-[16px] text-xs font-extrabold bg-white border border-[#E2E8F0] text-[#635BFF] hover:bg-[#F1F3FE] hover:border-[#635BFF] flex items-center gap-2 shadow-xs shrink-0 cursor-pointer transition-colors"
+          className="px-4 py-2.5 rounded-[16px] text-xs font-extrabold bg-white border border-[#E2E8F0] text-slate-700 hover:bg-slate-50 hover:border-slate-300 flex items-center gap-2 shadow-xs shrink-0 cursor-pointer transition-colors active:scale-95"
         >
-          <Calendar className="w-4 h-4 text-[#635BFF]" />
+          <Calendar className="w-4 h-4 text-slate-500" />
           My Saved Lists
         </button>
       </div>
@@ -240,44 +240,44 @@ export const SmartBasketPage: React.FC<SmartBasketPageProps> = ({ onNavigate }) 
       )}
 
       {/* 2. Configuration & Personalisation Form (Collapsible when checklist is active) */}
-      <div className="card-fresh p-6 sm:p-8 space-y-6">
+      <div className="card-fresh p-6 sm:p-8 space-y-6 bg-white">
         <div className="flex items-center justify-between border-b border-[#E2E8F0] pb-4">
           <div>
-            <h2 className="text-base font-black text-[#17172B]">1. Set Budget & Nutritional Requirements</h2>
+            <h2 className="text-base font-black text-[#18181B]">1. Set Budget & Nutritional Requirements</h2>
             <p className="text-xs text-[#64748B] font-medium">Configure Indian Rupee budget and preferences</p>
           </div>
-          <span className="text-[10px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-[#EEF2FF] text-[#635BFF] border border-[#635BFF]/20">
+          <span className="text-[10px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200">
             Kirana Benchmark (INR)
           </span>
         </div>
 
         {/* Budget Input & Presets */}
         <div className="space-y-3">
-          <label className="block text-xs font-black uppercase tracking-wider text-[#17172B]">
+          <label className="block text-xs font-black uppercase tracking-wider text-[#18181B]">
             Shopping Budget (₹ Indian Rupees)
           </label>
-          <div className="flex flex-wrap items-center gap-2">
-            <div className="relative flex-1 min-w-[180px]">
-              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-sm font-black text-[#635BFF]">₹</span>
+          <div className="flex flex-wrap items-center gap-2.5">
+            <div className="relative flex-1 min-w-[160px]">
+              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-sm font-black text-slate-900">₹</span>
               <input
                 type="number"
                 min="100"
                 step="50"
                 value={budgetInr}
                 onChange={(e) => setBudgetInr(Math.max(100, Number(e.target.value)))}
-                className="w-full pl-9 pr-4 py-3 rounded-[16px] bg-[#F8F9FD] border border-[#E2E8F0] font-mono font-bold text-base text-[#17172B] focus:outline-none focus:border-[#635BFF]"
+                className="w-full pl-9 pr-4 py-3 rounded-[16px] bg-slate-50 border border-[#E2E8F0] font-mono font-bold text-base text-[#18181B] focus:outline-none focus:border-slate-800"
               />
             </div>
-            <div className="flex gap-2">
+            <div className="flex flex-wrap gap-2">
               {budgetPresets.map(preset => (
                 <button
                   key={preset}
                   type="button"
                   onClick={() => setBudgetInr(preset)}
-                  className={`px-3.5 py-3 rounded-[14px] text-xs font-extrabold transition-all cursor-pointer ${
+                  className={`px-3.5 py-3 rounded-[14px] text-xs font-extrabold transition-all cursor-pointer active:scale-95 ${
                     budgetInr === preset 
-                      ? 'bg-[#635BFF] text-white shadow-md shadow-[#635BFF]/20' 
-                      : 'bg-[#F8F9FD] border border-[#E2E8F0] text-[#64748B] hover:text-[#17172B]'
+                      ? 'bg-slate-900 text-white shadow-xs' 
+                      : 'bg-slate-100 border border-slate-200 text-slate-700 hover:bg-slate-200 hover:text-[#18181B]'
                   }`}
                 >
                   ₹{preset}
@@ -289,7 +289,7 @@ export const SmartBasketPage: React.FC<SmartBasketPageProps> = ({ onNavigate }) 
 
         {/* Primary Nutrition Goal */}
         <div className="space-y-3">
-          <label className="block text-xs font-black uppercase tracking-wider text-[#17172B]">
+          <label className="block text-xs font-black uppercase tracking-wider text-[#18181B]">
             Primary Nutrition Goal
           </label>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
@@ -300,15 +300,15 @@ export const SmartBasketPage: React.FC<SmartBasketPageProps> = ({ onNavigate }) 
                   key={goal.id}
                   type="button"
                   onClick={() => setPrimaryGoal(goal.id)}
-                  className={`p-3.5 rounded-[16px] text-left transition-all border flex flex-col justify-between cursor-pointer ${
+                  className={`p-3.5 rounded-[16px] text-left transition-all border flex flex-col justify-between cursor-pointer active:scale-98 ${
                     isSelected
-                      ? 'border-2 border-[#635BFF] bg-[#EEF2FF] text-[#17172B] shadow-xs'
-                      : 'border-[#E2E8F0] bg-[#F8F9FD] text-[#64748B] hover:text-[#17172B]'
+                      ? 'border-2 border-emerald-600 bg-emerald-50/70 text-[#18181B] shadow-xs'
+                      : 'border-[#E2E8F0] bg-white text-[#64748B] hover:text-[#18181B] hover:border-slate-300'
                   }`}
                 >
                   <div className="flex items-center justify-between w-full">
-                    <span className="font-extrabold text-xs text-[#17172B]">{goal.label}</span>
-                    {isSelected && <Check className="w-4 h-4 text-[#635BFF]" />}
+                    <span className="font-extrabold text-xs text-[#18181B]">{goal.label}</span>
+                    {isSelected && <Check className="w-4 h-4 text-emerald-600" />}
                   </div>
                   <p className="text-[10px] text-[#64748B] mt-1 line-clamp-2">{goal.desc}</p>
                 </button>
@@ -319,7 +319,7 @@ export const SmartBasketPage: React.FC<SmartBasketPageProps> = ({ onNavigate }) 
 
         {/* Secondary Nutrition Goals (Bonus Preferences) */}
         <div className="space-y-2">
-          <label className="block text-xs font-black uppercase tracking-wider text-[#17172B]">
+          <label className="block text-xs font-black uppercase tracking-wider text-[#18181B]">
             Secondary Goals (Optional Bonus Factors)
           </label>
           <div className="flex flex-wrap gap-2">
@@ -334,10 +334,10 @@ export const SmartBasketPage: React.FC<SmartBasketPageProps> = ({ onNavigate }) 
                       isSelected ? prev.filter(id => id !== g.id) : [...prev, g.id]
                     );
                   }}
-                  className={`px-3 py-1.5 rounded-full text-xs font-extrabold transition-all cursor-pointer ${
+                  className={`px-3 py-1.5 rounded-full text-xs font-extrabold transition-all cursor-pointer active:scale-95 ${
                     isSelected
-                      ? 'bg-[#635BFF] text-white shadow-xs'
-                      : 'bg-[#F8F9FD] border border-[#E2E8F0] text-[#64748B] hover:text-[#17172B]'
+                      ? 'bg-slate-900 text-white shadow-xs'
+                      : 'bg-slate-100 border border-slate-200 text-slate-700 hover:text-[#18181B]'
                   }`}
                 >
                   + {g.label} {isSelected && '✓'}
@@ -351,13 +351,13 @@ export const SmartBasketPage: React.FC<SmartBasketPageProps> = ({ onNavigate }) 
         <div className="grid sm:grid-cols-3 gap-4 pt-2">
           
           <div className="space-y-2">
-            <label className="block text-xs font-black uppercase tracking-wider text-[#17201C]">
+            <label className="block text-xs font-black uppercase tracking-wider text-[#18181B]">
               Dietary Preference
             </label>
             <select
               value={dietaryPreference}
               onChange={(e) => setDietaryPreference(e.target.value)}
-              className="w-full px-4 py-3 rounded-[16px] bg-[#F8F8F4] border border-[#E5E9E6] text-xs font-bold text-[#17201C] focus:outline-none focus:border-[#164B3A]"
+              className="w-full px-4 py-3 rounded-[16px] bg-slate-50 border border-[#E2E8F0] text-xs font-bold text-[#18181B] focus:outline-none focus:border-slate-800"
             >
               {dietaryOptions.map(opt => (
                 <option key={opt.id} value={opt.id}>{opt.label}</option>
@@ -366,31 +366,31 @@ export const SmartBasketPage: React.FC<SmartBasketPageProps> = ({ onNavigate }) 
           </div>
 
           <div className="space-y-2">
-            <label className="block text-xs font-black uppercase tracking-wider text-[#17201C]">
+            <label className="block text-xs font-black uppercase tracking-wider text-[#18181B]">
               Household Servings
             </label>
-            <div className="flex items-center gap-2 px-3 py-2 rounded-[16px] bg-[#F8F8F4] border border-[#E5E9E6]">
-              <Users className="w-4 h-4 text-[#5A6561]" />
+            <div className="flex items-center gap-2 px-3 py-2 rounded-[16px] bg-slate-50 border border-[#E2E8F0]">
+              <Users className="w-4 h-4 text-[#64748B]" />
               <input
                 type="number"
                 min="1"
                 max="10"
                 value={householdSize}
                 onChange={(e) => setHouseholdSize(Math.max(1, Number(e.target.value)))}
-                className="w-full bg-transparent text-xs font-bold text-[#17201C] focus:outline-none"
+                className="w-full bg-transparent text-xs font-bold text-[#18181B] focus:outline-none"
               />
-              <span className="text-[10px] text-[#5A6561] font-bold">people</span>
+              <span className="text-[10px] text-[#64748B] font-bold">people</span>
             </div>
           </div>
 
           <div className="space-y-2">
-            <label className="block text-xs font-black uppercase tracking-wider text-[#17201C]">
+            <label className="block text-xs font-black uppercase tracking-wider text-[#18181B]">
               Shopping Duration
             </label>
             <select
               value={shoppingDuration}
               onChange={(e) => setShoppingDuration(e.target.value)}
-              className="w-full px-4 py-3 rounded-[16px] bg-[#F8F8F4] border border-[#E5E9E6] text-xs font-bold text-[#17201C] focus:outline-none focus:border-[#164B3A]"
+              className="w-full px-4 py-3 rounded-[16px] bg-slate-50 border border-[#E2E8F0] text-xs font-bold text-[#18181B] focus:outline-none focus:border-slate-800"
             >
               <option value="weekly">Weekly Plan (7 Days)</option>
               <option value="monthly">Monthly Kirana Stock (30 Days)</option>
@@ -402,7 +402,7 @@ export const SmartBasketPage: React.FC<SmartBasketPageProps> = ({ onNavigate }) 
 
         {/* Excluded Allergens (Hard Constraints) */}
         <div className="space-y-2 pt-2">
-          <label className="block text-xs font-black uppercase tracking-wider text-[#17201C]">
+          <label className="block text-xs font-black uppercase tracking-wider text-[#18181B]">
             Allergies to Exclude (Strict Filter)
           </label>
           <div className="flex flex-wrap gap-2">
@@ -418,10 +418,10 @@ export const SmartBasketPage: React.FC<SmartBasketPageProps> = ({ onNavigate }) 
                       isSelected ? prev.filter(a => a !== clean) : [...prev, clean]
                     );
                   }}
-                  className={`pill-soft-pop cursor-pointer ${
+                  className={`pill-soft-pop cursor-pointer active:scale-95 ${
                     isSelected
                       ? 'pill-pop-pink shadow-xs'
-                      : 'bg-[#F8F8F4] border-[#E5E9E6] text-[#5A6561] hover:text-[#17201C] hover:border-[#17201C]'
+                      : 'bg-slate-100 border-slate-200 text-[#64748B] hover:text-[#18181B] hover:border-slate-400'
                   }`}
                 >
                   {alg} {isSelected ? '✕' : '+'}
@@ -435,7 +435,7 @@ export const SmartBasketPage: React.FC<SmartBasketPageProps> = ({ onNavigate }) 
         <button
           onClick={handleGenerateBasket}
           disabled={loading}
-          className="w-full py-4 rounded-[18px] font-black text-sm bg-[#635BFF] text-white hover:bg-[#4E44E6] transition-all shadow-md shadow-[#635BFF]/30 flex items-center justify-center gap-2 cursor-pointer"
+          className="w-full py-4 rounded-[18px] font-black text-sm bg-slate-900 text-white hover:bg-slate-800 transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer active:scale-98"
         >
           {loading ? (
             <div className="flex items-center gap-2">
@@ -444,7 +444,7 @@ export const SmartBasketPage: React.FC<SmartBasketPageProps> = ({ onNavigate }) 
             </div>
           ) : (
             <>
-              <Sparkles className="w-4 h-4 text-white" />
+              <Sparkles className="w-4 h-4 text-[#B9F24A]" />
               Generate Smart Basket for ₹{budgetInr}
             </>
           )}
@@ -457,18 +457,18 @@ export const SmartBasketPage: React.FC<SmartBasketPageProps> = ({ onNavigate }) 
         <div className="space-y-6 animate-in fade-in">
           
           {/* Top Live Budget Metric Strip */}
-          <div className="card-fresh p-5 sticky top-2 z-30 shadow-md bg-white border-2 border-[#635BFF]/25">
+          <div className="card-fresh p-5 sticky top-2 z-30 shadow-sm bg-white/95 backdrop-blur-md border border-[#E2E8F0]">
             <div className="flex flex-wrap items-center justify-between gap-4">
               
               <div className="flex items-center gap-6">
                 <div>
                   <span className="text-[10px] font-black uppercase text-[#64748B] block">Budget</span>
-                  <span className="text-lg font-black text-[#17172B]">₹{budgetInr}</span>
+                  <span className="text-lg font-black text-[#18181B]">₹{budgetInr}</span>
                 </div>
 
                 <div className="border-l border-[#E2E8F0] pl-6">
                   <span className="text-[10px] font-black uppercase text-[#64748B] block">Estimated Cost</span>
-                  <span className={`text-lg font-black ${isOverBudget ? 'text-[#EF4444]' : 'text-[#635BFF]'}`}>
+                  <span className={`text-lg font-black ${isOverBudget ? 'text-[#EF4444]' : 'text-[#18181B]'}`}>
                     ₹{currentTotalCost}
                   </span>
                 </div>
@@ -484,14 +484,14 @@ export const SmartBasketPage: React.FC<SmartBasketPageProps> = ({ onNavigate }) 
               <div className="flex items-center gap-3">
                 <div className="text-right hidden sm:block">
                   <span className="text-[10px] font-bold text-[#64748B] block">Checklist Progress</span>
-                  <span className="text-xs font-black text-[#635BFF]">
+                  <span className="text-xs font-black text-slate-800">
                     {purchasedCount} of {checklistItems.length} purchased (₹{purchasedTotalCost})
                   </span>
                 </div>
 
                 <button
                   onClick={handleSaveShoppingList}
-                  className="px-4 py-2.5 rounded-[14px] font-black text-xs bg-[#635BFF] text-white hover:bg-[#4E44E6] flex items-center gap-1.5 shadow-md shadow-[#635BFF]/25 cursor-pointer"
+                  className="px-4 py-2.5 rounded-[14px] font-black text-xs bg-slate-900 text-white hover:bg-slate-800 flex items-center gap-1.5 shadow-xs cursor-pointer active:scale-95"
                 >
                   <Save className="w-4 h-4 text-white" />
                   {saveSuccess ? 'Saved to List!' : 'Save Checklist'}
@@ -515,7 +515,7 @@ export const SmartBasketPage: React.FC<SmartBasketPageProps> = ({ onNavigate }) 
             </span>
             <button
               onClick={() => setShowCataloguePicker(true)}
-              className="text-xs font-black text-[#635BFF] hover:underline flex items-center gap-1 cursor-pointer"
+              className="text-xs font-black text-emerald-700 hover:text-emerald-800 hover:underline flex items-center gap-1 cursor-pointer"
             >
               <Plus className="w-4 h-4" /> Add Item from Catalogue
             </button>
@@ -527,41 +527,41 @@ export const SmartBasketPage: React.FC<SmartBasketPageProps> = ({ onNavigate }) 
               <div
                 key={idx}
                 className={`card-fresh p-4 sm:p-5 transition-all flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 ${
-                  item.is_purchased ? 'bg-[#F8F9FD] opacity-75 border-dashed' : 'bg-white'
+                  item.is_purchased ? 'bg-slate-50 opacity-75 border-dashed' : 'bg-white'
                 }`}
               >
                 {/* Left: Checkbox & Name Details */}
                 <div className="flex items-start gap-3.5 flex-1 min-w-0">
                   <button
                     onClick={() => togglePurchased(idx)}
-                    className="mt-1 text-[#10B981] hover:scale-110 transition-transform cursor-pointer"
+                    className="mt-1 text-[#10B981] hover:scale-110 active:scale-90 transition-transform cursor-pointer min-w-[28px] min-h-[28px] flex items-center justify-center"
                     title={item.is_purchased ? "Mark pending" : "Mark purchased"}
                   >
                     {item.is_purchased ? (
-                      <CheckSquare className="w-5 h-5 text-[#10B981]" />
+                      <CheckSquare className="w-6 h-6 text-[#10B981]" />
                     ) : (
-                      <Square className="w-5 h-5 text-[#64748B]" />
+                      <Square className="w-6 h-6 text-[#64748B]" />
                     )}
                   </button>
 
                   <div className="space-y-1 min-w-0">
                     <div className="flex flex-wrap items-center gap-2">
-                      <h3 className={`font-black text-sm sm:text-base ${item.is_purchased ? 'line-through text-[#64748B]' : 'text-[#17172B]'}`}>
+                      <h3 className={`font-black text-sm sm:text-base ${item.is_purchased ? 'line-through text-[#64748B]' : 'text-[#18181B]'}`}>
                         {item.name}
                       </h3>
                       {item.hindi_name && (
-                        <span className="text-xs font-semibold text-[#64748B] bg-[#F8F9FD] px-2 py-0.5 rounded-full border border-[#E2E8F0]">
+                        <span className="text-xs font-semibold text-[#64748B] bg-slate-100 px-2 py-0.5 rounded-full border border-[#E2E8F0]">
                           {item.hindi_name}
                         </span>
                       )}
-                      <span className="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#EEF2FF] text-[#635BFF] border border-[#635BFF]/20">
+                      <span className="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 border border-slate-200">
                         {item.pack_size}
                       </span>
                     </div>
 
                     {/* Transparent Rationale Badge */}
-                    <p className="text-xs text-[#635BFF] font-semibold flex items-center gap-1">
-                      <Sparkles className="w-3.5 h-3.5 shrink-0 text-[#635BFF]" />
+                    <p className="text-xs text-slate-600 font-semibold flex items-center gap-1">
+                      <Sparkles className="w-3.5 h-3.5 shrink-0 text-emerald-600" />
                       {item.rationale}
                     </p>
 
@@ -570,7 +570,7 @@ export const SmartBasketPage: React.FC<SmartBasketPageProps> = ({ onNavigate }) 
                       <div className="flex flex-wrap gap-2 text-[10px] font-bold text-[#64748B] pt-1">
                         <span>Protein: <strong className="text-[#10B981]">{item.nutrition_snapshot.protein_g ?? 0}g</strong></span>
                         <span>•</span>
-                        <span>Fiber: <strong className="text-[#17172B]">{item.nutrition_snapshot.fiber_g ?? 0}g</strong></span>
+                        <span>Fiber: <strong className="text-[#18181B]">{item.nutrition_snapshot.fiber_g ?? 0}g</strong></span>
                         <span>•</span>
                         <span>Sugar: <strong className="text-[#F59E0B]">{item.nutrition_snapshot.sugars_g ?? 0}g</strong></span>
                       </div>
@@ -579,33 +579,35 @@ export const SmartBasketPage: React.FC<SmartBasketPageProps> = ({ onNavigate }) 
                 </div>
 
                 {/* Right: Quantity, Price & Actions */}
-                <div className="flex items-center justify-between sm:justify-end w-full sm:w-auto gap-4 pt-2 sm:pt-0 border-t sm:border-0 border-[#E5E9E6]">
+                <div className="flex items-center justify-between sm:justify-end w-full sm:w-auto gap-4 pt-2 sm:pt-0 border-t sm:border-0 border-[#E2E8F0]">
                   
-                  {/* Quantity Modifier */}
-                  <div className="flex items-center border border-[#E5E9E6] rounded-[14px] bg-[#F8F8F4] p-1">
+                  {/* Quantity Modifier with Large Mobile Touch Targets */}
+                  <div className="flex items-center border border-[#E2E8F0] rounded-[14px] bg-slate-50 p-1">
                     <button
                       onClick={() => updateQuantity(idx, -1)}
-                      className="p-1 rounded-[10px] hover:bg-white text-[#5A6561] hover:text-[#17201C]"
+                      className="w-8 h-8 flex items-center justify-center rounded-[10px] hover:bg-white text-slate-600 hover:text-[#18181B] active:scale-90 transition-transform cursor-pointer"
+                      title="Decrease quantity"
                     >
-                      <Minus className="w-3.5 h-3.5" />
+                      <Minus className="w-4 h-4" />
                     </button>
-                    <span className="w-7 text-center font-black text-xs text-[#17201C]">
+                    <span className="w-8 text-center font-black text-xs text-[#18181B]">
                       {item.quantity}
                     </span>
                     <button
                       onClick={() => updateQuantity(idx, 1)}
-                      className="p-1 rounded-[10px] hover:bg-white text-[#5A6561] hover:text-[#17201C]"
+                      className="w-8 h-8 flex items-center justify-center rounded-[10px] hover:bg-white text-slate-600 hover:text-[#18181B] active:scale-90 transition-transform cursor-pointer"
+                      title="Increase quantity"
                     >
-                      <Plus className="w-3.5 h-3.5" />
+                      <Plus className="w-4 h-4" />
                     </button>
                   </div>
 
                   {/* Item Price */}
                   <div className="text-right min-w-[70px]">
-                    <span className="text-sm font-black text-[#17201C] block">
+                    <span className="text-sm font-black text-[#18181B] block">
                       ₹{item.estimated_price_inr * item.quantity}
                     </span>
-                    <span className="text-[9px] font-bold text-[#5A6561] block">
+                    <span className="text-[9px] font-bold text-[#64748B] block">
                       @ ₹{item.estimated_price_inr} ea
                     </span>
                   </div>
@@ -613,7 +615,7 @@ export const SmartBasketPage: React.FC<SmartBasketPageProps> = ({ onNavigate }) 
                   {/* Remove action */}
                   <button
                     onClick={() => removeItem(idx)}
-                    className="p-2 rounded-xl text-[#5A6561] hover:text-[#E8785D] hover:bg-[#FEF2F2] transition-colors"
+                    className="p-2.5 rounded-xl text-slate-400 hover:text-[#EF4444] hover:bg-[#FFF1F2] active:scale-90 transition-all cursor-pointer"
                     title="Remove item"
                   >
                     <Trash2 className="w-4 h-4" />
@@ -626,9 +628,9 @@ export const SmartBasketPage: React.FC<SmartBasketPageProps> = ({ onNavigate }) 
           </div>
 
           {/* 4. Methodology & Disclaimer Footer */}
-          <div className="card-fresh p-5 text-xs text-[#5A6561] space-y-1.5 border border-[#E5E9E6]">
-            <div className="flex items-center gap-1.5 font-black text-[#164B3A]">
-              <Info className="w-4 h-4" /> Data Provenance & Methodology Notice
+          <div className="card-fresh p-5 text-xs text-[#64748B] space-y-1.5 border border-[#E2E8F0] bg-slate-50">
+            <div className="flex items-center gap-1.5 font-black text-slate-800">
+              <Info className="w-4 h-4 text-emerald-600" /> Data Provenance & Methodology Notice
             </div>
             <p className="leading-relaxed">
               FoodLens is a decision-support platform, not a medical or dietetic prescriber. Nutritional compositions are referenced from the Indian Food Composition Tables (IFCT 2017, National Institute of Nutrition, ICMR). Prices are estimated benchmarks from Indian kirana and retail store indices. The user retains final decision authority on all purchasing selections.

@@ -5,19 +5,19 @@
     --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     --font-mono: 'Space Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
     
-    /* Soft Pop Digital Community Palette */
-    --color-primary: #635BFF;         /* Vibrant Digital Indigo / Blue */
+    /* Soft Pop Digital Community Balanced Palette */
+    --color-primary: #635BFF;         /* Vibrant Digital Indigo / Blue Accent */
     --color-primary-hover: #4E44E6;
-    --color-secondary: #F1F3FE;       /* Soft Periwinkle Tint */
+    --color-secondary: #F4F4F6;       /* Clean Soft Neutral Tint */
     --color-pop-lime: #B9F24A;        /* Electric Lime Accent */
     --color-pop-pink: #FF6B8A;        /* Vibrant Coral / Rose */
     --color-pop-purple: #635BFF;      /* Digital Indigo */
     --color-pop-green: #10B981;       /* Emerald Green (Healthy) */
     --color-pop-red: #EF4444;         /* Vibrant Red (Alert) */
     --color-pop-yellow: #F59E0B;      /* Warm Amber / Yellow */
-    --color-bg-warm: #F8F9FD;          /* Airy Soft Pop Canvas */
+    --color-bg-warm: #FAFAFC;          /* Crisp Balanced Clean Canvas */
     --color-surface: #FFFFFF;          /* Pure White Cards */
-    --color-text-main: #17172B;        /* Deep Navy Ink */
+    --color-text-main: #18181B;        /* Neutral Slate/Charcoal Ink */
     --color-text-muted: #64748B;       /* Cool Slate Muted */
     --color-warning: #F59E0B;          /* Amber Yellow */
     --color-concern: #EF4444;          /* Alert Red */
@@ -30,6 +30,7 @@
     font-family: var(--font-sans);
     overflow-x: hidden;
     min-height: 100vh;
+    -webkit-tap-highlight-color: transparent;
   }
 
   .font-mono-code {
@@ -42,26 +43,26 @@
   background-color: #ffffff;
   border: 1.5px solid #E2E8F0;
   border-radius: 24px;
-  box-shadow: 0 4px 20px -2px rgba(99, 91, 255, 0.04), 0 2px 6px -1px rgba(0, 0, 0, 0.02);
-  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 2px 12px -2px rgba(0, 0, 0, 0.03), 0 1px 3px -1px rgba(0, 0, 0, 0.02);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .card-fresh:hover {
-  border-color: #635BFF;
-  box-shadow: 0 12px 32px -4px rgba(99, 91, 255, 0.08), 0 4px 12px -2px rgba(0, 0, 0, 0.03);
+  border-color: #CBD5E1;
+  box-shadow: 0 10px 24px -4px rgba(0, 0, 0, 0.06), 0 3px 8px -2px rgba(0, 0, 0, 0.03);
   transform: translateY(-1px);
 }
 
 .card-mint {
-  background-color: #F1F3FE;
-  border: 1.5px solid rgba(99, 91, 255, 0.2);
+  background-color: #F0FDF4;
+  border: 1.5px solid rgba(16, 185, 129, 0.25);
   border-radius: 24px;
 }
 
 .card-forest {
-  background: linear-gradient(135deg, #17172B 0%, #201D47 60%, #2E286E 100%);
+  background: linear-gradient(135deg, #18181B 0%, #27272A 100%);
   color: #ffffff;
-  border: 1px solid rgba(99, 91, 255, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 24px;
 }
 

@@ -103,7 +103,7 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({ scanResu
       {/* Navigation Top */}
       <button
         onClick={() => onNavigate('scan')}
-        className="flex items-center gap-2 text-xs font-extrabold text-[#635BFF] hover:underline cursor-pointer"
+        className="flex items-center gap-2 text-xs font-extrabold text-slate-600 hover:text-[#18181B] cursor-pointer"
       >
         <ArrowLeft className="w-4 h-4" /> Back to Scanner
       </button>
@@ -113,25 +113,25 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({ scanResu
         <div className="flex flex-col sm:flex-row items-center gap-6 text-center sm:text-left">
           
           {/* Large Product Image (Section 15 spec) */}
-          <div className="w-32 h-32 sm:w-40 sm:h-40 rounded-[20px] bg-[#F8F9FD] border border-[#E2E8F0] flex items-center justify-center overflow-hidden shrink-0 shadow-sm p-3">
+          <div className="w-32 h-32 sm:w-40 sm:h-40 rounded-[20px] bg-slate-50 border border-[#E2E8F0] flex items-center justify-center overflow-hidden shrink-0 shadow-xs p-3">
             {product.image_url ? (
               <img src={product.image_url} alt={product.name} className="w-full h-full object-contain" />
             ) : (
-              <Package className="w-16 h-16 text-[#635BFF]/30" />
+              <Package className="w-16 h-16 text-slate-300" />
             )}
           </div>
 
           <div className="space-y-2">
             <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2">
-              <span className="text-[10px] font-extrabold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-[#635BFF] text-white">
+              <span className="text-[10px] font-extrabold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-slate-900 text-white">
                 {product.brand || 'KIND'}
               </span>
-              <span className="text-[10px] font-extrabold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-[#EEF2FF] text-[#635BFF] border border-[#635BFF]/20">
+              <span className="text-[10px] font-extrabold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200">
                 Source: {product.data_source || 'Open Food Facts'}
               </span>
             </div>
 
-            <h1 className="text-2xl sm:text-3xl font-black text-[#17172B] tracking-tight">{product.name}</h1>
+            <h1 className="text-2xl sm:text-3xl font-black text-[#18181B] tracking-tight">{product.name}</h1>
             <p className="text-xs text-[#64748B] font-semibold">Category: {product.category}</p>
           </div>
         </div>
@@ -140,7 +140,7 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({ scanResu
         <div className="flex flex-wrap gap-3 w-full md:w-auto">
           <button
             onClick={handleAddToBasket}
-            className={`flex-1 md:flex-none px-5 py-3.5 rounded-[18px] font-extrabold text-xs flex items-center justify-center gap-2 transition-all shadow-md cursor-pointer ${
+            className={`flex-1 md:flex-none px-6 py-3.5 rounded-[18px] font-extrabold text-xs flex items-center justify-center gap-2 transition-all shadow-md cursor-pointer active:scale-95 ${
               addedToBasket
                 ? 'bg-[#10B981] text-white shadow-[#10B981]/25'
                 : 'bg-[#635BFF] text-white hover:bg-[#4E44E6] shadow-[#635BFF]/25'
@@ -152,9 +152,9 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({ scanResu
 
           <button
             onClick={() => onNavigate('compare')}
-            className="flex-1 md:flex-none px-5 py-3.5 rounded-[18px] font-extrabold text-xs bg-[#EEF2FF] text-[#635BFF] hover:bg-[#E0E7FF] flex items-center justify-center gap-2 cursor-pointer transition-colors"
+            className="flex-1 md:flex-none px-6 py-3.5 rounded-[18px] font-extrabold text-xs bg-slate-100 text-slate-800 hover:bg-slate-200 border border-slate-200 flex items-center justify-center gap-2 cursor-pointer transition-colors active:scale-95"
           >
-            <GitCompare className="w-4 h-4 text-[#635BFF]" /> Compare
+            <GitCompare className="w-4 h-4 text-slate-600" /> Compare
           </button>
         </div>
       </div>
@@ -163,7 +163,7 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({ scanResu
       <div className="grid md:grid-cols-2 gap-6">
         
         {/* General Score */}
-        <div className="card-fresh p-6 sm:p-8 space-y-4 text-center flex flex-col items-center justify-center">
+        <div className="card-fresh p-6 sm:p-8 space-y-4 text-center flex flex-col items-center justify-center bg-white">
           <span className="text-xs font-black uppercase tracking-wider text-[#64748B]">
             General FoodLens Score
           </span>
@@ -174,8 +174,8 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({ scanResu
         </div>
 
         {/* Personalized Score (Section 7 spec: Visually different + Goal oriented) */}
-        <div className="card-fresh p-6 sm:p-8 space-y-4 text-center flex flex-col items-center justify-center border-2 border-[#635BFF]/25 bg-gradient-to-b from-white to-[#F8F9FD] relative shadow-sm">
-          <span className="text-xs font-black uppercase tracking-wider text-[#635BFF]">
+        <div className="card-fresh p-6 sm:p-8 space-y-4 text-center flex flex-col items-center justify-center border-2 border-slate-200 bg-white relative shadow-xs">
+          <span className="text-xs font-black uppercase tracking-wider text-slate-800">
             Your Personalized Score
           </span>
           
@@ -185,7 +185,7 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({ scanResu
             goalBadge={score.goal_type ? score.goal_type.replace('_', ' ').toUpperCase() : 'Diabetes-Oriented'} 
           />
 
-          <p className="text-xs text-[#17172B] font-semibold leading-relaxed max-w-xs">
+          <p className="text-xs text-[#18181B] font-semibold leading-relaxed max-w-xs">
             Adjusted specifically for your selected health goal and allergy exclusions.
           </p>
         </div>
@@ -225,10 +225,10 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({ scanResu
       <div className="card-fresh p-6 sm:p-8 space-y-6">
         <div className="flex items-center justify-between">
           <div>
-            <h3 className="text-lg font-black text-[#17172B]">Why did you score {score.personalized_score}?</h3>
+            <h3 className="text-lg font-black text-[#18181B]">Why did you score {score.personalized_score}?</h3>
             <p className="text-xs text-[#64748B] font-semibold">Transparent breakdown from FoodLens scoring algorithm</p>
           </div>
-          <span className="text-xs font-black text-[#635BFF] bg-[#EEF2FF] border border-[#635BFF]/20 px-3 py-1 rounded-full">
+          <span className="text-xs font-black text-slate-700 bg-slate-100 border border-slate-200 px-3 py-1 rounded-full">
             Deterministic Engine
           </span>
         </div>
@@ -276,7 +276,7 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({ scanResu
       </div>
 
       {/* 5. ✦ FOODLENS INSIGHT CARD */}
-      <div className="card-forest p-6 sm:p-8 space-y-3 relative shadow-xl">
+      <div className="card-forest p-6 sm:p-8 space-y-3 relative shadow-lg">
         <div className="flex items-center gap-2 text-[#B9F24A] font-black text-sm uppercase tracking-wider">
           <Sparkles className="w-5 h-5 text-[#B9F24A]" /> ✦ FoodLens Insight
         </div>
@@ -288,7 +288,7 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({ scanResu
       {/* 6. INGREDIENT INTELLIGENCE UI (Section 8 spec) */}
       <div className="card-fresh p-6 sm:p-8 space-y-6">
         <div>
-          <h3 className="text-lg font-black text-[#17172B] uppercase tracking-wider">
+          <h3 className="text-lg font-black text-[#18181B] uppercase tracking-wider">
             Ingredient Intelligence
           </h3>
           <p className="text-xs text-[#64748B] font-semibold">
@@ -301,11 +301,11 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({ scanResu
             <div
               key={idx}
               onClick={() => setSelectedIngredient(item)}
-              className="py-4 flex items-center justify-between cursor-pointer group hover:px-2 hover:bg-[#F8F9FD] rounded-xl transition-all"
+              className="py-4 flex items-center justify-between cursor-pointer group hover:px-2 hover:bg-slate-50 rounded-xl transition-all"
             >
               <div className="space-y-0.5">
                 <div className="flex items-center gap-2">
-                  <span className="text-sm font-extrabold text-[#17172B] group-hover:text-[#635BFF] transition-colors">
+                  <span className="text-sm font-extrabold text-[#18181B] group-hover:text-emerald-700 transition-colors">
                     {item.name}
                   </span>
                   {item.isConcern && (
@@ -317,7 +317,7 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({ scanResu
                 <p className="text-xs text-[#64748B] font-medium">{item.category}</p>
               </div>
 
-              <span className="text-xs font-bold text-[#635BFF] flex items-center gap-1 opacity-80 group-hover:opacity-100">
+              <span className="text-xs font-bold text-slate-500 flex items-center gap-1 group-hover:text-emerald-700">
                 <Info className="w-4 h-4" /> Learn more
               </span>
             </div>
@@ -329,7 +329,7 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({ scanResu
       {alternatives.length > 0 && (
         <div className="card-fresh p-6 sm:p-8 space-y-6">
           <div>
-            <h3 className="text-lg font-black text-[#17172B] tracking-tight uppercase">
+            <h3 className="text-lg font-black text-[#18181B] tracking-tight uppercase">
               Better Matches For You
             </h3>
             <p className="text-xs text-[#64748B] font-semibold">
@@ -342,7 +342,7 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({ scanResu
               <div key={alt.id} className="p-5 rounded-2xl bg-[#F0FDF4] border border-[#10B981]/30 space-y-3">
                 <div className="flex justify-between items-start">
                   <div>
-                    <h4 className="font-extrabold text-[#17172B] text-base">{alt.name}</h4>
+                    <h4 className="font-extrabold text-[#18181B] text-base">{alt.name}</h4>
                     <p className="text-xs text-[#64748B] font-medium">{alt.brand}</p>
                   </div>
                   <span className="px-3 py-1 rounded-full bg-[#10B981] text-white font-black text-xs shadow-xs">
@@ -361,7 +361,7 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({ scanResu
 
                 <button 
                   onClick={() => onNavigate('scan')}
-                  className="w-full py-2.5 rounded-[12px] font-extrabold bg-[#635BFF] text-white text-xs hover:bg-[#4E44E6] transition-colors shadow-xs cursor-pointer"
+                  className="w-full py-2.5 rounded-[12px] font-extrabold bg-[#10B981] text-white text-xs hover:bg-[#059669] transition-colors shadow-xs cursor-pointer active:scale-98"
                 >
                   Why this is better
                 </button>

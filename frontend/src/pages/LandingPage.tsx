@@ -11,20 +11,20 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
       
       {/* Hero Section (Soft Pop Digital Community) */}
       <section className="text-center py-10 px-4 space-y-6">
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#EEF2FF] border border-[#635BFF]/25 text-[#635BFF] font-extrabold text-xs uppercase tracking-wider shadow-xs">
-          <Sparkles className="w-4 h-4 text-[#635BFF]" /> Nutrition Intelligence Platform
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-100 border border-slate-200 text-slate-700 font-extrabold text-xs uppercase tracking-wider shadow-xs">
+          <Sparkles className="w-4 h-4 text-emerald-600" /> Nutrition Intelligence Platform
         </div>
 
-        <h1 className="text-4xl sm:text-6xl font-black text-[#17172B] max-w-4xl mx-auto leading-tight tracking-tight">
+        <h1 className="text-3xl sm:text-5xl md:text-6xl font-black text-[#18181B] max-w-4xl mx-auto leading-tight tracking-tight">
           Understand what's <span className="text-[#635BFF] underline decoration-[#B9F24A] decoration-wavy decoration-2">really</span> in your food.
         </h1>
 
-        <p className="text-base sm:text-lg text-[#64748B] max-w-2xl mx-auto leading-relaxed font-semibold">
+        <p className="text-sm sm:text-base md:text-lg text-[#64748B] max-w-2xl mx-auto leading-relaxed font-semibold">
           Discover the truth behind the packaging. Scan barcodes or grocery labels for instant health suitability scores, smart budget planning, and explainable nutrition.
         </p>
 
         {/* Soft Pop Tag Filter Cloud */}
-        <div className="flex flex-wrap justify-center items-center gap-2.5 pt-2 max-w-2xl mx-auto">
+        <div className="flex flex-wrap justify-center items-center gap-2 pt-2 max-w-2xl mx-auto">
           <span className="pill-soft-pop pill-pop-lime cursor-default">
             ✦ High Protein
           </span>
@@ -42,17 +42,17 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
           </span>
         </div>
 
-        <div className="flex flex-wrap justify-center items-center gap-4 pt-4">
+        <div className="flex flex-wrap justify-center items-center gap-3.5 pt-4">
           <button
             onClick={() => onNavigate('register')}
-            className="px-8 py-4 rounded-[20px] font-extrabold bg-[#635BFF] text-white shadow-lg shadow-[#635BFF]/30 hover:bg-[#4E44E6] hover:scale-102 transition-all flex items-center gap-2 text-sm cursor-pointer"
+            className="px-7 py-3.5 rounded-[18px] font-extrabold bg-[#635BFF] text-white shadow-md shadow-[#635BFF]/25 hover:bg-[#4E44E6] active:scale-95 transition-all flex items-center gap-2 text-sm cursor-pointer"
           >
             Start Personalization <ArrowRight className="w-4 h-4 text-[#B9F24A]" />
           </button>
 
           <button
             onClick={() => onNavigate('smart_basket')}
-            className="px-8 py-4 rounded-[20px] font-extrabold bg-[#EEF2FF] text-[#635BFF] border-1.5 border-[#635BFF]/20 hover:bg-[#E0E7FF] hover:scale-102 transition-all flex items-center gap-2 text-sm cursor-pointer"
+            className="px-7 py-3.5 rounded-[18px] font-extrabold bg-slate-100 text-slate-800 border border-slate-200 hover:bg-slate-200 active:scale-95 transition-all flex items-center gap-2 text-sm cursor-pointer"
           >
             Plan Smart Basket (₹)
           </button>
@@ -60,33 +60,33 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
       </section>
 
       {/* Core Platform Capabilities Grid */}
-      <section className="grid md:grid-cols-3 gap-6">
+      <section className="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
         
-        <div className="card-fresh p-8 space-y-4 hover:border-[#635BFF]/40 transition-all">
-          <div className="w-12 h-12 rounded-2xl bg-[#EEF2FF] text-[#635BFF] flex items-center justify-center font-black">
-            <Scan className="w-6 h-6" />
+        <div className="card-fresh p-6 sm:p-8 space-y-4 hover:border-slate-300 transition-all">
+          <div className="w-12 h-12 rounded-2xl bg-slate-900 text-white flex items-center justify-center font-black">
+            <Scan className="w-6 h-6 text-[#B9F24A]" />
           </div>
-          <h3 className="text-lg font-black text-[#17172B]">Barcode + OCR Fallback</h3>
+          <h3 className="text-lg font-black text-[#18181B]">Barcode + OCR Fallback</h3>
           <p className="text-[#64748B] text-xs font-semibold leading-relaxed">
             Scan via Open Food Facts or utilize fallback OpenCV AI OCR image recognition for custom packaged labels.
           </p>
         </div>
 
-        <div className="card-fresh p-8 space-y-4 hover:border-[#635BFF]/40 transition-all">
-          <div className="w-12 h-12 rounded-2xl bg-[#ECFDF5] text-[#10B981] flex items-center justify-center font-black">
+        <div className="card-fresh p-6 sm:p-8 space-y-4 hover:border-slate-300 transition-all">
+          <div className="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-black">
             <HeartPulse className="w-6 h-6" />
           </div>
-          <h3 className="text-lg font-black text-[#17172B]">Goal Suitability Engine</h3>
+          <h3 className="text-lg font-black text-[#18181B]">Goal Suitability Engine</h3>
           <p className="text-[#64748B] text-xs font-semibold leading-relaxed">
             Deterministic scoring engine tailored to Diabetes-Oriented, High Protein, Low Sodium, or Vegan profile goals.
           </p>
         </div>
 
-        <div className="card-fresh p-8 space-y-4 hover:border-[#635BFF]/40 transition-all">
-          <div className="w-12 h-12 rounded-2xl bg-[#FFF1F2] text-[#EF4444] flex items-center justify-center font-black">
+        <div className="card-fresh p-6 sm:p-8 space-y-4 hover:border-slate-300 transition-all sm:col-span-2 md:col-span-1">
+          <div className="w-12 h-12 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center font-black">
             <ShieldAlert className="w-6 h-6" />
           </div>
-          <h3 className="text-lg font-black text-[#17172B]">Ingredient Intelligence</h3>
+          <h3 className="text-lg font-black text-[#18181B]">Ingredient Intelligence</h3>
           <p className="text-[#64748B] text-xs font-semibold leading-relaxed">
             Decodes technical INS additive codes (INS 322, INS 415), flags allergens, and explains complex ingredients clearly.
           </p>
@@ -96,9 +96,9 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
 
       {/* Feature Highlights Banner */}
       <section>
-        <div className="card-forest p-8 sm:p-12 space-y-6 relative overflow-hidden shadow-xl">
+        <div className="card-forest p-6 sm:p-10 space-y-6 relative overflow-hidden shadow-lg">
           <div className="max-w-2xl space-y-4">
-            <h2 className="text-3xl font-black text-white tracking-tight">
+            <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
               Designed for your everyday food decisions
             </h2>
             <p className="text-white/80 text-sm leading-relaxed font-medium">
@@ -123,7 +123,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
             <div className="pt-4">
               <button
                 onClick={() => onNavigate('register')}
-                className="px-6 py-3.5 rounded-[16px] font-extrabold bg-[#635BFF] text-white hover:bg-[#4E44E6] transition-colors text-xs shadow-lg shadow-[#635BFF]/30 cursor-pointer"
+                className="px-6 py-3.5 rounded-[16px] font-black bg-[#B9F24A] text-slate-950 hover:bg-[#a6db3f] transition-all text-xs shadow-md cursor-pointer active:scale-95"
               >
                 Create Your Account Now
               </button>

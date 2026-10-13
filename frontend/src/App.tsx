@@ -40,21 +40,21 @@ const MainApp: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#F8F8F4] flex items-center justify-center text-[#5A6561]">
+      <div className="min-h-screen bg-[#FAFAFC] flex items-center justify-center text-[#64748B]">
         <div className="flex flex-col items-center gap-3">
-          <div className="w-10 h-10 border-4 border-[#164B3A] border-t-transparent rounded-full animate-spin"></div>
-          <span className="text-xs font-bold text-[#164B3A]">Initializing FoodLens Fresh Intelligence...</span>
+          <div className="w-10 h-10 border-4 border-[#635BFF] border-t-transparent rounded-full animate-spin"></div>
+          <span className="text-xs font-bold text-[#18181B]">Initializing FoodLens Intelligence...</span>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#F8F8F4] text-[#17201C] flex flex-col font-sans">
+    <div className="min-h-screen bg-[#FAFAFC] text-[#18181B] flex flex-col font-sans">
       <Navbar activeTab={activeTab} setActiveTab={handleNavigate} />
       
-      {/* Main Content View with Responsive Desktop Sidebar Margin & Mobile Bottom Nav Padding */}
-      <main className="flex-1 md:pl-64 pb-20 md:pb-8">
+      {/* Main Content View with Responsive Desktop Sidebar Margin & Mobile Bottom Nav Safe Clearance */}
+      <main className="flex-1 md:pl-64 pb-28 sm:pb-32 md:pb-8">
         {activeTab === 'landing' && <LandingPage onNavigate={handleNavigate} />}
         {activeTab === 'login' && <LoginPage onNavigate={handleNavigate} />}
         {activeTab === 'register' && <RegisterPage onNavigate={handleNavigate} />}
@@ -72,10 +72,10 @@ const MainApp: React.FC = () => {
         {activeTab === 'profile' && <ProfilePage />}
       </main>
 
-      <footer className="md:pl-64 border-t border-[#E5E9E6] py-6 text-center text-xs text-[#5A6561] bg-white">
+      <footer className="md:pl-64 border-t border-[#E2E8F0] py-6 text-center text-xs text-[#64748B] bg-white">
         <div className="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-2">
-          <span className="font-bold text-[#164B3A]">FoodLens — AI-Powered Food Intelligence Platform (Fresh Intelligence Theme)</span>
-          <span>Decision-Support System — Educational Purpose Only</span>
+          <span className="font-bold text-[#18181B]">FoodLens — Nutrition Intelligence Decision-Support Platform</span>
+          <span>Educational Purpose Only — Verify Allergen Labels Directly</span>
         </div>
       </footer>
     </div>

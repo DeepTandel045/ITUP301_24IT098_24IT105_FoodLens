@@ -69,12 +69,12 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onNavigate }) => {
       {/* 1. HERO GREETING & HEADER */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="space-y-1">
-          <h1 className="text-2xl sm:text-3xl font-black text-[#17172B] tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-black text-[#18181B] tracking-tight">
             Welcome back, {userName} 👋
           </h1>
           <p className="text-sm text-[#64748B] font-semibold flex items-center gap-2 flex-wrap">
             Real nutrition intelligence calibrated for:
-            <span className="text-[#635BFF] bg-[#EEF2FF] border border-[#635BFF]/20 px-2.5 py-0.5 rounded-full text-xs font-extrabold uppercase tracking-wide">
+            <span className="text-slate-800 bg-slate-100 border border-slate-200 px-2.5 py-0.5 rounded-full text-xs font-extrabold uppercase tracking-wide">
               {profileNeeds?.goal_title || data?.dietary_goal?.replace('_', ' ') || 'General Healthy'}
             </span>
           </p>
@@ -82,24 +82,24 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onNavigate }) => {
 
         <button
           onClick={() => onNavigate('profile')}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold text-[#635BFF] bg-white border border-[#E2E8F0] hover:border-[#635BFF] hover:bg-[#F1F3FE] shadow-xs transition-colors self-start sm:self-auto cursor-pointer"
+          className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold text-slate-700 bg-white border border-[#E2E8F0] hover:border-slate-400 hover:bg-slate-50 shadow-xs transition-colors self-start sm:self-auto cursor-pointer"
         >
-          <SlidersHorizontal className="w-4 h-4 text-[#635BFF]" />
+          <SlidersHorizontal className="w-4 h-4 text-slate-500" />
           Edit Health Needs
         </button>
       </div>
 
       {/* 2. PROFILE NEEDS & GOAL SUMMARY CARD */}
       {profileNeeds && (
-        <div className="card-fresh p-5 sm:p-6 bg-linear-to-r from-white via-[#F8F9FD] to-[#EEF2FF] border border-[#635BFF]/20 shadow-sm space-y-4">
+        <div className="card-fresh p-5 sm:p-6 bg-white border border-[#E2E8F0] shadow-xs space-y-4">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div className="flex items-start gap-3.5">
-              <div className="w-10 h-10 rounded-2xl bg-[#635BFF] text-white flex items-center justify-center shrink-0 shadow-md shadow-[#635BFF]/20">
-                <Target className="w-5 h-5 text-white" />
+              <div className="w-10 h-10 rounded-2xl bg-slate-900 text-white flex items-center justify-center shrink-0 shadow-sm">
+                <Target className="w-5 h-5 text-emerald-400" />
               </div>
               <div className="space-y-1">
                 <div className="flex items-center gap-2 flex-wrap">
-                  <span className="text-xs font-black uppercase tracking-wider text-[#635BFF]">
+                  <span className="text-xs font-black uppercase tracking-wider text-slate-500">
                     Active Goal & Target Guideline
                   </span>
                   <span className={`text-[10px] font-extrabold px-2.5 py-0.5 rounded-full ${
@@ -109,12 +109,12 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onNavigate }) => {
                       ? 'bg-[#ECFDF5] text-[#065F46] border border-[#A7F3D0]'
                       : profileNeeds.goal_key.includes('sodium')
                       ? 'bg-[#FFF1F2] text-[#BE123C] border border-[#FECDD3]'
-                      : 'bg-[#EEF2FF] text-[#4338CA] border border-[#C7D2FE]'
+                      : 'bg-slate-100 text-slate-700 border border-slate-200'
                   }`}>
                     {profileNeeds.primary_metric} Monitored
                   </span>
                 </div>
-                <p className="text-sm font-extrabold text-[#17172B]">
+                <p className="text-sm font-extrabold text-[#18181B]">
                   {profileNeeds.target_guideline}
                 </p>
               </div>
@@ -124,7 +124,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onNavigate }) => {
             <div className="flex items-center gap-4 text-xs font-bold text-[#64748B] shrink-0 border-t md:border-t-0 md:border-l border-[#E2E8F0] pt-3 md:pt-0 md:pl-5">
               <div>
                 <span className="block text-[10px] uppercase font-black text-[#94A3B8]">Week Scans</span>
-                <span className="text-sm font-black text-[#17172B]">{profileNeeds.weekly_total_scans} items</span>
+                <span className="text-sm font-black text-[#18181B]">{profileNeeds.weekly_total_scans} items</span>
               </div>
               <div className="w-px h-8 bg-[#E2E8F0]"></div>
               <div>
@@ -144,13 +144,13 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onNavigate }) => {
               <div className="w-px h-8 bg-[#E2E8F0]"></div>
               <div>
                 <span className="block text-[10px] uppercase font-black text-[#94A3B8]">All-Time Scans</span>
-                <span className="text-sm font-black text-[#17172B]">{profileNeeds.total_scans_all_time}</span>
+                <span className="text-sm font-black text-[#18181B]">{profileNeeds.total_scans_all_time}</span>
               </div>
             </div>
           </div>
 
           {/* Allergies and Exclusions strip (RED for alert, GREEN for safe) */}
-          <div className="flex items-center gap-2 pt-2 border-t border-[#635BFF]/10 text-xs flex-wrap">
+          <div className="flex items-center gap-2 pt-2 border-t border-[#E2E8F0] text-xs flex-wrap">
             <span className="font-extrabold text-[#64748B] flex items-center gap-1">
               {profileNeeds.allergies && profileNeeds.allergies.length > 0 ? (
                 <ShieldAlert className="w-4 h-4 text-[#EF4444]" />
@@ -183,7 +183,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onNavigate }) => {
             <span className="text-xs font-black uppercase tracking-wider text-[#64748B]">
               Today's FoodLens Score
             </span>
-            <span className="text-[11px] font-extrabold text-[#635BFF] bg-[#EEF2FF] px-2.5 py-0.5 rounded-full border border-[#635BFF]/20">
+            <span className="text-[11px] font-extrabold text-slate-700 bg-slate-100 px-2.5 py-0.5 rounded-full border border-slate-200">
               {todayCount} scanned today
             </span>
           </div>
@@ -210,27 +210,27 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onNavigate }) => {
                     ↓ {data.score_change_from_yesterday} pts vs yesterday
                   </span>
                 ) : (
-                  <span className="inline-flex items-center gap-1 text-[#64748B] bg-[#F8F9FD] border border-[#E2E8F0] px-3 py-1 rounded-full">
+                  <span className="inline-flex items-center gap-1 text-[#64748B] bg-slate-100 border border-[#E2E8F0] px-3 py-1 rounded-full">
                     <Minus className="w-4 h-4 text-[#64748B]" />
                     Equal to yesterday's average
                   </span>
                 )
               ) : (
-                <span className="text-[#635BFF] bg-[#EEF2FF] px-3 py-1 rounded-full font-bold">
+                <span className="text-slate-700 bg-slate-100 px-3 py-1 rounded-full font-bold">
                   Today's active food score based on {todayCount} scans
                 </span>
               )}
             </div>
           ) : (
-            <div className="inline-flex items-center gap-1 text-xs font-bold text-[#64748B] bg-[#F8F9FD] border border-[#E2E8F0] px-3.5 py-1.5 rounded-full">
+            <div className="inline-flex items-center gap-1 text-xs font-bold text-[#64748B] bg-slate-100 border border-[#E2E8F0] px-3.5 py-1.5 rounded-full">
               <Flame className="w-3.5 h-3.5 text-[#F59E0B]" />
               Scan a product below to establish today's score
             </div>
           )}
         </div>
 
-        {/* Scan Food CTA Card (VISUALLY DOMINANT - Dark Navy Soft Pop) */}
-        <div className="card-forest p-6 sm:p-8 flex flex-col justify-between space-y-6 relative overflow-hidden shadow-xl">
+        {/* Scan Food CTA Card (VISUALLY DOMINANT - Dark Charcoal Soft Pop with Lime Accent) */}
+        <div className="card-forest p-6 sm:p-8 flex flex-col justify-between space-y-6 relative overflow-hidden shadow-lg">
           <div className="space-y-2">
             <div className="w-12 h-12 rounded-2xl bg-white/10 text-[#B9F24A] flex items-center justify-center font-black">
               <Camera className="w-7 h-7" />
@@ -245,25 +245,25 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onNavigate }) => {
 
           <button
             onClick={() => onNavigate('scan')}
-            className="w-full py-4 rounded-[18px] font-extrabold bg-[#635BFF] text-white hover:bg-[#4E44E6] transition-all shadow-lg shadow-[#635BFF]/40 text-base flex items-center justify-center gap-2 group cursor-pointer"
+            className="w-full py-4 rounded-[18px] font-black bg-[#B9F24A] text-slate-950 hover:bg-[#a8df3f] transition-all shadow-md text-base flex items-center justify-center gap-2 group cursor-pointer active:scale-98"
           >
-            <Scan className="w-5 h-5 text-white group-hover:scale-110 transition-transform" />
+            <Scan className="w-5 h-5 text-slate-950 group-hover:scale-110 transition-transform" />
             Scan Barcode or Label
           </button>
         </div>
 
       </div>
 
-      {/* 4. FOODLENS AI INSIGHT / HEALTHY NEXT-STEP PLANNER (Soft Pop Blue) */}
-      <div className="card-mint p-6 flex items-start gap-4 shadow-xs">
-        <div className="w-10 h-10 rounded-2xl bg-[#635BFF] text-white flex items-center justify-center shrink-0 shadow-md shadow-[#635BFF]/25">
+      {/* 4. FOODLENS AI INSIGHT / HEALTHY NEXT-STEP PLANNER (Fresh Mint Card) */}
+      <div className="card-mint p-5 sm:p-6 flex items-start gap-4 shadow-xs">
+        <div className="w-10 h-10 rounded-2xl bg-emerald-600 text-white flex items-center justify-center shrink-0 shadow-sm">
           <Sparkles className="w-5 h-5 text-white" />
         </div>
         <div className="space-y-1">
-          <h3 className="text-xs font-black text-[#635BFF] uppercase tracking-wider">
+          <h3 className="text-xs font-black text-emerald-800 uppercase tracking-wider">
             ✦ Real FoodLens Intelligence Insight
           </h3>
-          <p className="text-sm text-[#17172B] leading-relaxed font-medium">
+          <p className="text-sm text-[#18181B] leading-relaxed font-medium">
             {data?.healthy_next_step_insight || "Your scanned items are being analyzed in real-time. Scan foods throughout your shopping trip to receive tailored next-step dietary advice."}
           </p>
         </div>
@@ -376,12 +376,12 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onNavigate }) => {
       <div className="card-fresh p-6 sm:p-8 space-y-6">
         <div className="flex items-center justify-between">
           <div>
-            <h3 className="text-lg font-black text-[#17172B]">Recent Scanned Items</h3>
+            <h3 className="text-lg font-black text-[#18181B]">Recent Scanned Items</h3>
             <p className="text-xs text-[#64748B] font-semibold">Latest products logged in your nutrition history</p>
           </div>
           <button
             onClick={() => onNavigate('history')}
-            className="text-xs font-extrabold text-[#635BFF] hover:underline flex items-center gap-1 cursor-pointer"
+            className="text-xs font-extrabold text-slate-700 hover:text-[#18181B] flex items-center gap-1 cursor-pointer"
           >
             Full Scan History <ChevronRight className="w-4 h-4" />
           </button>
@@ -400,7 +400,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onNavigate }) => {
                 <div
                   key={scan.scan_id}
                   onClick={() => onNavigate('product_details', scan)}
-                  className="p-4 rounded-[18px] border border-[#E2E8F0] bg-[#F8F9FD] hover:bg-white hover:border-[#635BFF]/30 transition-all cursor-pointer flex items-center justify-between gap-3 group shadow-2xs hover:shadow-sm"
+                  className="p-4 rounded-[18px] border border-[#E2E8F0] bg-slate-50/70 hover:bg-white hover:border-slate-300 transition-all cursor-pointer flex items-center justify-between gap-3 group shadow-2xs hover:shadow-sm"
                 >
                   <div className="flex items-center gap-3 min-w-0">
                     <div className="w-12 h-12 rounded-xl bg-white border border-[#E2E8F0] flex items-center justify-center shrink-0 overflow-hidden">
@@ -414,7 +414,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onNavigate }) => {
                       <span className="text-[9px] font-black uppercase text-[#94A3B8]">
                         {scan.scan_method}
                       </span>
-                      <h4 className="text-xs font-extrabold text-[#17172B] group-hover:text-[#635BFF] transition-colors truncate">
+                      <h4 className="text-xs font-extrabold text-[#18181B] group-hover:text-emerald-700 transition-colors truncate">
                         {scan.product.name}
                       </h4>
                       <p className="text-[10px] text-[#64748B] truncate font-medium">{scan.product.brand}</p>
@@ -430,7 +430,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onNavigate }) => {
           </div>
         ) : (
           <div className="py-10 text-center text-[#64748B] text-xs space-y-3">
-            <Scan className="w-10 h-10 mx-auto text-[#635BFF]/40" />
+            <Scan className="w-10 h-10 mx-auto text-slate-400" />
             <p className="font-bold">No food scans recorded yet.</p>
             <button
               onClick={() => onNavigate('scan')}

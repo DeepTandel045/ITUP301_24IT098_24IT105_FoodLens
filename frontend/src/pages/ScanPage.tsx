@@ -73,33 +73,33 @@ export const ScanPage: React.FC<ScanPageProps> = ({ onNavigate }) => {
     <div className="max-w-4xl mx-auto py-6 px-4 space-y-6">
       
       {/* Top Scanner Navigation Header (Section 4 spec: ← Scan Food ... ✕) */}
-      <div className="flex items-center justify-between py-2 border-b border-[#E5E9E6]">
+      <div className="flex items-center justify-between py-2 border-b border-[#E2E8F0]">
         <button
           onClick={() => onNavigate('dashboard')}
-          className="flex items-center gap-2 text-xs font-extrabold text-[#164B3A] hover:underline"
+          className="flex items-center gap-2 text-xs font-extrabold text-slate-700 hover:text-[#18181B] cursor-pointer"
         >
           ← Scan Food
         </button>
-        <span className="text-xs font-black uppercase tracking-wider text-[#5A6561]">
+        <span className="text-xs font-black uppercase tracking-wider text-[#64748B]">
           Camera Intelligence
         </span>
         <button
           onClick={() => onNavigate('dashboard')}
-          className="p-1.5 rounded-full hover:bg-[#E5E9E6] text-[#5A6561]"
+          className="p-1.5 rounded-full hover:bg-slate-100 text-[#64748B] cursor-pointer"
         >
           <X className="w-5 h-5" />
         </button>
       </div>
 
       {error && (
-        <div className="card-coral p-4 flex items-center justify-between text-xs font-bold text-[#E8785D]">
+        <div className="card-coral p-4 flex items-center justify-between text-xs font-bold text-[#EF4444]">
           <div className="flex items-center gap-3">
             <AlertCircle className="w-5 h-5 shrink-0" />
             <span>{error}</span>
           </div>
           <button 
             onClick={() => setActiveScanMode('label')}
-            className="px-3 py-1 bg-[#164B3A] text-white rounded-full text-[11px] font-extrabold"
+            className="px-3 py-1 bg-slate-900 text-white rounded-full text-[11px] font-extrabold cursor-pointer active:scale-95"
           >
             Try Label OCR
           </button>
@@ -107,10 +107,10 @@ export const ScanPage: React.FC<ScanPageProps> = ({ onNavigate }) => {
       )}
 
       {loading && (
-        <div className="card-fresh p-8 text-center space-y-4 shadow-lg border-2 border-[#164B3A]">
-          <div className="w-12 h-12 border-4 border-[#164B3A] border-t-transparent rounded-full animate-spin mx-auto"></div>
-          <h3 className="text-base font-black text-[#17201C]">Analyzing Product Ingredients & Nutrition...</h3>
-          <p className="text-xs text-[#5A6561] font-semibold">Running OpenCV preprocessing & deterministic suitability scoring engine</p>
+        <div className="card-fresh p-8 text-center space-y-4 shadow-lg border-2 border-emerald-500">
+          <div className="w-12 h-12 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin mx-auto"></div>
+          <h3 className="text-base font-black text-[#18181B]">Analyzing Product Ingredients & Nutrition...</h3>
+          <p className="text-xs text-[#64748B] font-semibold">Running OpenCV preprocessing & deterministic suitability scoring engine</p>
         </div>
       )}
 
