@@ -9,33 +9,52 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
   return (
     <div className="space-y-16 py-8 px-4 max-w-6xl mx-auto">
       
-      {/* Hero Section (Section 13 spec: "FOODLENS — Understand what's really in your food.") */}
-      <section className="text-center py-12 px-4 space-y-6">
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#DDF3E7] border border-[#164B3A]/20 text-[#164B3A] font-extrabold text-xs uppercase tracking-wider">
+      {/* Hero Section (Soft Pop + Fresh Intelligence) */}
+      <section className="text-center py-10 px-4 space-y-6">
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#DDF3E7] border border-[#164B3A]/20 text-[#164B3A] font-extrabold text-xs uppercase tracking-wider shadow-xs">
           <Sparkles className="w-4 h-4 text-[#164B3A]" /> Fresh Intelligence Platform
         </div>
 
         <h1 className="text-4xl sm:text-6xl font-black text-[#17201C] max-w-4xl mx-auto leading-tight tracking-tight">
-          Understand what's <span className="text-[#164B3A] underline decoration-[#DDF3E7] decoration-wavy">really</span> in your food.
+          Understand what's <span className="text-[#164B3A] underline decoration-[#B9F24A] decoration-wavy decoration-2">really</span> in your food.
         </h1>
 
         <p className="text-base sm:text-lg text-[#5A6561] max-w-2xl mx-auto leading-relaxed font-semibold">
-          Discover the truth behind the labels. Scan barcodes or ingredient lists for instant AI-powered analysis, personalized health scores, and clear explanations.
+          Discover the truth behind the packaging. Scan barcodes or grocery labels for instant health suitability scores, smart budget planning, and explainable nutrition.
         </p>
+
+        {/* Soft Pop Tag Filter Cloud */}
+        <div className="flex flex-wrap justify-center items-center gap-2.5 pt-2 max-w-2xl mx-auto">
+          <span className="pill-soft-pop pill-pop-lime cursor-default">
+            ✦ High Protein
+          </span>
+          <span className="pill-soft-pop pill-pop-pink cursor-default">
+            ♥ Zero Added Sugar
+          </span>
+          <span className="pill-soft-pop pill-pop-purple cursor-default">
+            ⚡ Diabetes Friendly
+          </span>
+          <span className="pill-soft-pop pill-pop-mint cursor-default">
+            ☘ Clean Kirana Staples
+          </span>
+          <span className="pill-soft-pop pill-pop-dark font-mono-code cursor-default">
+            INS 322 Decoder
+          </span>
+        </div>
 
         <div className="flex flex-wrap justify-center items-center gap-4 pt-4">
           <button
             onClick={() => onNavigate('register')}
-            className="px-8 py-4 rounded-[18px] font-extrabold bg-[#164B3A] text-white shadow-lg hover:bg-[#0F3629] transition-all flex items-center gap-2 text-sm"
+            className="px-8 py-4 rounded-[20px] font-extrabold bg-[#164B3A] text-white shadow-lg hover:bg-[#0F3629] hover:scale-102 transition-all flex items-center gap-2 text-sm"
           >
-            Start Personalization <ArrowRight className="w-4 h-4 text-[#DDF3E7]" />
+            Start Personalization <ArrowRight className="w-4 h-4 text-[#B9F24A]" />
           </button>
 
           <button
-            onClick={() => onNavigate('scan')}
-            className="px-8 py-4 rounded-[18px] font-extrabold bg-[#DDF3E7] text-[#164B3A] hover:bg-[#cbebd9] transition-all flex items-center gap-2 text-sm"
+            onClick={() => onNavigate('smart_basket')}
+            className="px-8 py-4 rounded-[20px] font-extrabold bg-[#DDF3E7] text-[#164B3A] border-1.5 border-[#164B3A]/20 hover:bg-[#cbebd9] hover:scale-102 transition-all flex items-center gap-2 text-sm"
           >
-            <Scan className="w-4 h-4 text-[#164B3A]" /> Try Camera Scanner
+            Plan Smart Basket (₹)
           </button>
         </div>
       </section>

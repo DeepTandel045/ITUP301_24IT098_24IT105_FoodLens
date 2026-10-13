@@ -192,25 +192,25 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({ scanResu
 
       </div>
 
-      {/* 3. QUICK NUTRITION PILLS */}
+      {/* 3. QUICK NUTRITION PILLS (Soft Pop Cards & Space Mono Numbers) */}
       <div className="card-fresh p-6 space-y-3">
         <h3 className="text-xs font-black text-[#5A6561] uppercase tracking-wider">Nutrition Highlights</h3>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
-          <div className="p-3 rounded-[16px] bg-[#F8F8F4] border border-[#E5E9E6]">
-            <span className="text-[10px] text-[#5A6561] font-bold block uppercase">Energy</span>
-            <strong className="text-base text-[#17201C] font-black">{product.nutrition?.energy_kcal ?? 220} kcal</strong>
+          <div className="p-3.5 rounded-[20px] bg-[#F8F8F4] border-1.5 border-[#E5E9E6] hover:border-[#164B3A]/30 transition-all">
+            <span className="text-[10px] text-[#5A6561] font-bold block uppercase tracking-wider">Energy</span>
+            <strong className="text-base text-[#17201C] font-mono-code font-black block mt-0.5">{product.nutrition?.energy_kcal ?? 220} kcal</strong>
           </div>
-          <div className="p-3 rounded-[16px] bg-[#FEF2F2] border border-[#E8785D]/20">
-            <span className="text-[10px] text-[#E8785D] font-bold block uppercase">Sugars</span>
-            <strong className="text-base text-[#E8785D] font-black">{product.nutrition?.sugars_g ?? 8}g</strong>
+          <div className="p-3.5 rounded-[20px] bg-[#FEF2F2] border-1.5 border-[#E8785D]/30 hover:border-[#E8785D] transition-all">
+            <span className="text-[10px] text-[#E8785D] font-bold block uppercase tracking-wider">Sugars</span>
+            <strong className="text-base text-[#E8785D] font-mono-code font-black block mt-0.5">{product.nutrition?.sugars_g ?? 8}g</strong>
           </div>
-          <div className="p-3 rounded-[16px] bg-[#DDF3E7] border border-[#164B3A]/20">
-            <span className="text-[10px] text-[#164B3A] font-bold block uppercase">Protein</span>
-            <strong className="text-base text-[#164B3A] font-black">{product.nutrition?.protein_g ?? 20}g</strong>
+          <div className="p-3.5 rounded-[20px] bg-[#DDF3E7] border-1.5 border-[#164B3A]/25 hover:border-[#164B3A] transition-all">
+            <span className="text-[10px] text-[#164B3A] font-bold block uppercase tracking-wider">Protein</span>
+            <strong className="text-base text-[#164B3A] font-mono-code font-black block mt-0.5">{product.nutrition?.protein_g ?? 20}g</strong>
           </div>
-          <div className="p-3 rounded-[16px] bg-[#F8F8F4] border border-[#E5E9E6]">
-            <span className="text-[10px] text-[#5A6561] font-bold block uppercase">Sodium</span>
-            <strong className="text-base text-[#17201C] font-black">{product.nutrition?.sodium_mg ?? 140}mg</strong>
+          <div className="p-3.5 rounded-[20px] bg-[#F8F8F4] border-1.5 border-[#E5E9E6] hover:border-[#164B3A]/30 transition-all">
+            <span className="text-[10px] text-[#5A6561] font-bold block uppercase tracking-wider">Sodium</span>
+            <strong className="text-base text-[#17201C] font-mono-code font-black block mt-0.5">{product.nutrition?.sodium_mg ?? 140}mg</strong>
           </div>
         </div>
       </div>

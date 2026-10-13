@@ -64,13 +64,23 @@ export const CircularScoreRing: React.FC<CircularScoreRingProps> = ({
 
       <div className="relative flex items-center justify-center" style={{ width: svgSize, height: svgSize }}>
         <svg className="transform -rotate-90" width={svgSize} height={svgSize}>
-          {/* Background circle track */}
+          {/* Outer soft pop ambient track */}
           <circle
             cx={svgSize / 2}
             cy={svgSize / 2}
             r={radius}
-            stroke="#E5E9E6"
+            stroke="#EEF2EF"
             strokeWidth={strokeWidth}
+            fill="transparent"
+          />
+          {/* Inner concentric ring (Soft Pop radar aesthetic) */}
+          <circle
+            cx={svgSize / 2}
+            cy={svgSize / 2}
+            r={Math.max(radius - strokeWidth - 2, 4)}
+            stroke="#F0F4F1"
+            strokeWidth={1.5}
+            strokeDasharray="4 3"
             fill="transparent"
           />
           {/* Active score ring */}
@@ -90,8 +100,8 @@ export const CircularScoreRing: React.FC<CircularScoreRingProps> = ({
 
         {/* Center Score Text */}
         <div className="absolute inset-0 flex flex-col items-center justify-center leading-none">
-          <span className={`${fontSize} text-[#17201C] tracking-tight`}>{score}</span>
-          <span className="text-[10px] font-bold text-[#5A6561] mt-0.5">/{maxScore}</span>
+          <span className={`${fontSize} font-mono-code text-[#17201C] tracking-tight`}>{score}</span>
+          <span className="text-[10px] font-mono-code font-bold text-[#5A6561] mt-0.5">/{maxScore}</span>
         </div>
       </div>
 

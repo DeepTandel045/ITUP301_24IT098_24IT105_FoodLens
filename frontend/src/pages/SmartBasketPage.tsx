@@ -418,13 +418,13 @@ export const SmartBasketPage: React.FC<SmartBasketPageProps> = ({ onNavigate }) 
                       isSelected ? prev.filter(a => a !== clean) : [...prev, clean]
                     );
                   }}
-                  className={`px-3 py-1.5 rounded-full text-xs font-extrabold transition-all ${
+                  className={`pill-soft-pop cursor-pointer ${
                     isSelected
-                      ? 'bg-[#FEF2F2] border border-[#E8785D] text-[#E8785D]'
-                      : 'bg-[#F8F8F4] border border-[#E5E9E6] text-[#5A6561]'
+                      ? 'pill-pop-pink shadow-xs'
+                      : 'bg-[#F8F8F4] border-[#E5E9E6] text-[#5A6561] hover:text-[#17201C] hover:border-[#17201C]'
                   }`}
                 >
-                  {alg} {isSelected && '✕'}
+                  {alg} {isSelected ? '✕' : '+'}
                 </button>
               );
             })}
