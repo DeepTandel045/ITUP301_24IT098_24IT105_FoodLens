@@ -9,7 +9,8 @@ import {
   X,
   Scan,
   HelpCircle,
-  Keyboard
+  Keyboard,
+  Camera
 } from 'lucide-react';
 
 interface ScanPageProps {
@@ -176,21 +177,33 @@ export const ScanPage: React.FC<ScanPageProps> = ({ onNavigate }) => {
           )}
         </div>
 
-        {/* Shutter / Trigger Button (◉) */}
-        <div className="flex items-center gap-4">
+        {/* Action Trigger Buttons */}
+        <div className="flex items-center justify-center gap-3 w-full">
           {activeScanMode === 'barcode' && (
-            <button
-              onClick={() => setIsScannerOpen(true)}
-              className="w-16 h-16 rounded-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 flex items-center justify-center font-black text-2xl shadow-lg ring-4 ring-emerald-500/30 active:scale-95 transition-transform"
-              title="Start Live Camera Scanner"
-            >
-              ◉
-            </button>
+            <div className="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
+              <button
+                onClick={() => setIsScannerOpen(true)}
+                className="w-full sm:w-auto px-7 py-3.5 rounded-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-sm shadow-lg ring-4 ring-emerald-500/30 active:scale-95 transition-all flex items-center justify-center gap-2 cursor-pointer"
+                title="Start Live Camera Scanner"
+              >
+                <Camera className="w-5 h-5 text-slate-950" />
+                <span>📸 Click to Open Live Camera</span>
+              </button>
+
+              <button
+                onClick={() => setActiveScanMode('manual')}
+                className="w-full sm:w-auto px-5 py-3 rounded-full bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs flex items-center justify-center gap-2 cursor-pointer transition-all active:scale-95"
+              >
+                <Keyboard className="w-4 h-4 text-slate-300" />
+                <span>Enter Barcode Manually</span>
+              </button>
+            </div>
           )}
 
           {activeScanMode === 'upload' && (
-            <label htmlFor="label-upload-camera" className="px-6 py-3 rounded-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs cursor-pointer shadow-lg">
-              Choose Photo
+            <label htmlFor="label-upload-camera" className="px-6 py-3 rounded-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs cursor-pointer shadow-lg active:scale-95 transition-transform flex items-center gap-2">
+              <Upload className="w-4 h-4 text-slate-950" />
+              <span>Choose / Take Photo</span>
               <input
                 type="file"
                 accept="image/*"
@@ -200,13 +213,27 @@ export const ScanPage: React.FC<ScanPageProps> = ({ onNavigate }) => {
               />
             </label>
           )}
+
+          {activeScanMode === 'label' && (
+            <label htmlFor="label-upload-direct" className="px-6 py-3 rounded-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs cursor-pointer shadow-lg active:scale-95 transition-transform flex items-center gap-2">
+              <FileText className="w-4 h-4 text-slate-950" />
+              <span>Take / Upload Nutrition Label</span>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleFileChange}
+                className="hidden"
+                id="label-upload-direct"
+              />
+            </label>
+          )}
         </div>
 
         {/* Mode Switcher Tabs (Barcode | Label | Upload | Manual) */}
-        <div className="w-full flex justify-center gap-2 pt-2 border-t border-slate-800 text-xs font-extrabold">
+        <div className="w-full flex justify-center gap-2 pt-2 border-t border-slate-800 text-xs font-extrabold flex-wrap">
           <button
             onClick={() => setActiveScanMode('barcode')}
-            className={`px-4 py-2 rounded-full transition-all ${
+            className={`px-4 py-2 rounded-full transition-all cursor-pointer ${
               activeScanMode === 'barcode' ? 'bg-emerald-500 text-slate-950 font-black' : 'text-slate-400 hover:text-white'
             }`}
           >
@@ -215,7 +242,7 @@ export const ScanPage: React.FC<ScanPageProps> = ({ onNavigate }) => {
 
           <button
             onClick={() => setActiveScanMode('label')}
-            className={`px-4 py-2 rounded-full transition-all ${
+            className={`px-4 py-2 rounded-full transition-all cursor-pointer ${
               activeScanMode === 'label' ? 'bg-emerald-500 text-slate-950 font-black' : 'text-slate-400 hover:text-white'
             }`}
           >
@@ -224,7 +251,7 @@ export const ScanPage: React.FC<ScanPageProps> = ({ onNavigate }) => {
 
           <button
             onClick={() => setActiveScanMode('upload')}
-            className={`px-4 py-2 rounded-full transition-all ${
+            className={`px-4 py-2 rounded-full transition-all cursor-pointer ${
               activeScanMode === 'upload' ? 'bg-emerald-500 text-slate-950 font-black' : 'text-slate-400 hover:text-white'
             }`}
           >
@@ -233,7 +260,7 @@ export const ScanPage: React.FC<ScanPageProps> = ({ onNavigate }) => {
 
           <button
             onClick={() => setActiveScanMode('manual')}
-            className={`px-4 py-2 rounded-full transition-all ${
+            className={`px-4 py-2 rounded-full transition-all cursor-pointer ${
               activeScanMode === 'manual' ? 'bg-emerald-500 text-slate-950 font-black' : 'text-slate-400 hover:text-white'
             }`}
           >
@@ -245,37 +272,79 @@ export const ScanPage: React.FC<ScanPageProps> = ({ onNavigate }) => {
 
       {/* Manual Input Form Panel if Mode is Manual */}
       {activeScanMode === 'manual' && (
-        <div className="card-fresh p-6 space-y-3">
-          <form onSubmit={handleManualLookup} className="flex gap-2">
+        <div className="card-fresh p-6 space-y-4 bg-white border border-[#E2E8F0]">
+          <div>
+            <h3 className="text-sm font-black text-[#18181B] uppercase tracking-wider">
+              Enter Barcode Number or Product Name
+            </h3>
+            <p className="text-xs text-[#64748B]">
+              Type product digits directly to retrieve instant nutrition suitability scores.
+            </p>
+          </div>
+
+          <form onSubmit={handleManualLookup} className="flex flex-col sm:flex-row gap-2.5">
             <input
               type="text"
-              placeholder="Type 12–13 digit barcode e.g. 8901058852387"
+              placeholder="Type barcode e.g. 8901058852387 or 'jolo'"
               value={manualBarcode}
               onChange={(e) => setManualBarcode(e.target.value)}
-              className="flex-1 px-4 py-3 rounded-xl bg-[#F8F8F4] border border-[#E5E9E6] text-sm font-mono text-[#17201C] focus:outline-none focus:border-[#164B3A]"
+              className="flex-1 px-4 py-3.5 rounded-xl bg-slate-50 border border-[#E2E8F0] text-sm font-mono font-bold text-[#18181B] focus:outline-none focus:border-slate-800"
+              autoFocus
             />
             <button
               type="submit"
-              className="px-6 py-3 rounded-xl font-extrabold bg-[#164B3A] text-white hover:bg-[#0F3629]"
+              className="px-6 py-3.5 rounded-xl font-black bg-slate-900 text-white hover:bg-slate-800 transition-all text-xs cursor-pointer active:scale-95 flex items-center justify-center gap-1.5 shadow-xs"
             >
-              Lookup
+              <span>✓ Done / Lookup Product</span>
             </button>
           </form>
+
+          {/* Quick Test Sample Barcode Chips */}
+          <div className="pt-2 border-t border-[#E2E8F0] space-y-2">
+            <span className="text-[11px] font-bold text-[#64748B] uppercase tracking-wider block">
+              Quick Test Samples (Tap to look up immediately):
+            </span>
+            <div className="flex flex-wrap gap-2">
+              {[
+                { code: '8901058852387', name: 'Maggi Noodles' },
+                { code: '8901491101837', name: 'Quaker Oats' },
+                { code: '8901030383427', name: 'Kissan Fruit Jam' },
+                { code: '8901063142077', name: 'Britannia Good Day' },
+                { code: 'jolo', name: 'Jolo Chips' }
+              ].map((s) => (
+                <button
+                  key={s.code}
+                  type="button"
+                  onClick={() => handleBarcodeSuccess(s.code)}
+                  className="px-3 py-1.5 rounded-full text-xs font-bold bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 flex items-center gap-1.5 cursor-pointer active:scale-95 transition-all"
+                >
+                  <span>{s.name}</span>
+                  <span className="font-mono text-[10px] text-slate-400">({s.code})</span>
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
       )}
 
       {/* Label Upload Submission Button if file selected */}
       {(activeScanMode === 'upload' || activeScanMode === 'label') && selectedFile && (
-        <div className="card-mint p-4 flex items-center justify-between">
-          <span className="text-xs font-bold text-[#164B3A]">
-            Selected file: {selectedFile.name}
-          </span>
+        <div className="card-fresh p-4 sm:p-5 flex flex-col sm:flex-row items-center justify-between gap-3 bg-white border border-[#E2E8F0]">
+          <div className="space-y-0.5 text-center sm:text-left">
+            <span className="text-xs font-bold text-slate-800 block">
+              Photo Selected: {selectedFile.name}
+            </span>
+            <span className="text-[11px] text-slate-500 block">
+              Ready to extract text and decode ingredients via OpenCV OCR
+            </span>
+          </div>
           <button
             onClick={handleOcrSubmit}
             disabled={loading}
-            className="px-5 py-2.5 rounded-full font-extrabold bg-[#164B3A] text-white text-xs hover:bg-[#0F3629] flex items-center gap-1.5 shadow-sm"
+            className="w-full sm:w-auto px-6 py-3 rounded-xl font-black bg-slate-900 text-white text-xs hover:bg-slate-800 flex items-center justify-center gap-2 shadow-xs cursor-pointer active:scale-95"
           >
-            Analyze via AI OCR <ArrowRight className="w-4 h-4" />
+            <span>✓ Done / Analyze via AI OCR</span>
+            <ArrowRight className="w-4 h-4 text-[#B9F24A]" />
           </button>
         </div>
       )}
