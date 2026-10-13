@@ -6,36 +6,11 @@ from app.core.config import settings
 logger = logging.get_logger(__name__) if hasattr(logging, "get_logger") else logging.getLogger(__name__)
 
 async def fetch_product_by_barcode(barcode: str) -> Optional[Dict[str, Any]]:
-    """Fetch product details from Open Food Facts API v3."""
+    """Fetch product details from Open Food Facts API v3 with fast regional lookup fallback."""
     clean_barcode = barcode.strip().lstrip("0") if len(barcode.strip()) > 10 else barcode.strip()
-    
-    # Try OFF v3 API
-    url = f"{settings.OPEN_FOOD_FACTS_URL}/product/{clean_barcode}.json"
-    headers = {"User-Agent": "FoodLens - Web App - Version 1.0 - www.foodlens.app"}
-    
-    async with httpx.AsyncClient(timeout=10.0) as client:
-        try:
-            response = await client.get(url, headers=headers)
-            if response.status_code == 200:
-                data = response.json()
-                if data.get("status") == 1 or data.get("product"):
-                    return parse_open_food_facts_data(data.get("product", {}), barcode)
-        except Exception as e:
-            logger.warning(f"OFF v3 lookup failed for barcode {barcode}: {str(e)}")
-            
-        # Fallback to v0 API if v3 returned no result
-        fallback_url = f"https://world.openfoodfacts.org/api/v0/product/{barcode}.json"
-        try:
-            response = await client.get(fallback_url, headers=headers)
-            if response.status_code == 200:
-                data = response.json()
-                if data.get("status") == 1 and data.get("product"):
-                    return parse_open_food_facts_data(data.get("product", {}), barcode)
-        except Exception as e:
-            logger.warning(f"OFF v0 fallback lookup failed for barcode {barcode}: {str(e)}")
-
-    # Check Regional / Curated Database Fallback (e.g. Jolo Chips & local items)
     clean_query = clean_barcode.lower()
+
+    # 1. Fast check: Regional / Curated Database (e.g. Jolo Chips & local items) - Instant response
     if "jolo" in clean_query or "chip" in clean_query or clean_barcode in ["8908000000000", "8901058852387", "123456789"]:
         return {
             "barcode": barcode,
@@ -61,6 +36,31 @@ async def fetch_product_by_barcode(barcode: str) -> Optional[Dict[str, Any]]:
                 "serving_unit": "g"
             }
         }
+
+    # 2. Try OFF v3 API with fast 2.5s timeout
+    url = f"{settings.OPEN_FOOD_FACTS_URL}/product/{clean_barcode}.json"
+    headers = {"User-Agent": "FoodLens - Web App - Version 1.0 - www.foodlens.app"}
+    
+    async with httpx.AsyncClient(timeout=2.5) as client:
+        try:
+            response = await client.get(url, headers=headers)
+            if response.status_code == 200:
+                data = response.json()
+                if data.get("status") == 1 or data.get("product"):
+                    return parse_open_food_facts_data(data.get("product", {}), barcode)
+        except Exception as e:
+            logger.warning(f"OFF v3 lookup failed for barcode {barcode}: {str(e)}")
+            
+        # Fast fallback to v0 API if v3 returned no result
+        fallback_url = f"https://world.openfoodfacts.org/api/v0/product/{barcode}.json"
+        try:
+            response = await client.get(fallback_url, headers=headers)
+            if response.status_code == 200:
+                data = response.json()
+                if data.get("status") == 1 and data.get("product"):
+                    return parse_open_food_facts_data(data.get("product", {}), barcode)
+        except Exception as e:
+            logger.warning(f"OFF v0 fallback lookup failed for barcode {barcode}: {str(e)}")
 
     # Smart fallback template for unlisted regional barcodes so the user can evaluate suitability & OCR
     return {

@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form
+from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form, Header
 from sqlalchemy.orm import Session
 from typing import Optional
 import datetime
@@ -65,11 +65,16 @@ async def process_and_save_product_scan(
     else:
         nutrition = db.query(ProductNutrition).filter(ProductNutrition.product_id == product.id).first()
 
-    # 2. Get User Preferences & Goal
-    profile = db.query(UserProfile).filter(UserProfile.user_id == user.id).first()
-    dietary_goal = profile.dietary_goal if profile else "general_healthy_eating"
-    user_prefs = [p.preference_type for p in user.preferences]
-    user_allergies = [a.allergen for a in user.allergies]
+    # 2. Get User Preferences & Goal (use defaults for guest users)
+    if user:
+        profile = db.query(UserProfile).filter(UserProfile.user_id == user.id).first()
+        dietary_goal = profile.dietary_goal if profile else "general_healthy_eating"
+        user_prefs = [p.preference_type for p in user.preferences]
+        user_allergies = [a.allergen for a in user.allergies]
+    else:
+        dietary_goal = "general_healthy_eating"
+        user_prefs = []
+        user_allergies = []
 
     # Build nutrition dict for scoring engine
     nutr_data = {
@@ -104,38 +109,42 @@ async def process_and_save_product_scan(
     
     healthy_next_step = await generate_healthy_next_step(dietary_goal, [score_res["personalized_score"]])
 
-    # 5. Save Scan & Score history
-    scan = Scan(
-        user_id=user.id,
-        product_id=product.id,
-        scan_method=scan_method,
-        data_source=product.data_source,
-        scanned_at=datetime.datetime.utcnow()
-    )
-    db.add(scan)
-    db.commit()
-    db.refresh(scan)
+    # 5. Save Scan & Score history if user is authenticated
+    scan_id = 0
+    scanned_at = datetime.datetime.utcnow()
+    if user:
+        scan = Scan(
+            user_id=user.id,
+            product_id=product.id,
+            scan_method=scan_method,
+            data_source=product.data_source,
+            scanned_at=scanned_at
+        )
+        db.add(scan)
+        db.commit()
+        db.refresh(scan)
+        scan_id = scan.id
 
-    score = Score(
-        scan_id=scan.id,
-        general_score=score_res["general_score"],
-        personalized_score=score_res["personalized_score"],
-        goal_type=dietary_goal,
-        breakdown_json=score_res["breakdown"]
-    )
-    db.add(score)
+        score = Score(
+            scan_id=scan.id,
+            general_score=score_res["general_score"],
+            personalized_score=score_res["personalized_score"],
+            goal_type=dietary_goal,
+            breakdown_json=score_res["breakdown"]
+        )
+        db.add(score)
 
-    ai_exp_obj = AIExplanation(
-        scan_id=scan.id,
-        explanation_type="score_explanation",
-        content=ai_explanation
-    )
-    db.add(ai_exp_obj)
-    db.commit()
+        ai_exp_obj = AIExplanation(
+            scan_id=scan.id,
+            explanation_type="score_explanation",
+            content=ai_explanation
+        )
+        db.add(ai_exp_obj)
+        db.commit()
 
     return ScanResponse(
-        scan_id=scan.id,
-        scanned_at=scan.scanned_at,
+        scan_id=scan_id,
+        scanned_at=scanned_at,
         scan_method=scan_method,
         product=ProductResponse(
             id=product.id,
@@ -161,25 +170,43 @@ async def process_and_save_product_scan(
         )
     )
 
+def get_optional_user_for_scan(
+    authorization: Optional[str] = Header(None),
+    db: Session = Depends(get_db)
+) -> Optional[User]:
+    """Helper to retrieve user if logged in, but return None for guests without raising 401."""
+    if not authorization or not authorization.startswith("Bearer "):
+        return None
+    token = authorization.split(" ")[1]
+    from app.core.security import decode_token
+    payload = decode_token(token)
+    if not payload or "sub" not in payload:
+        return None
+    try:
+        user_id = int(payload["sub"])
+        return db.query(User).filter(User.id == user_id).first()
+    except Exception:
+        return None
+
 @router.post("/barcode", response_model=ScanResponse)
 async def scan_barcode(
     req: ManualBarcodeRequest,
-    current_user: User = Depends(get_current_user),
+    current_user: Optional[User] = Depends(get_optional_user_for_scan),
     db: Session = Depends(get_db)
 ):
-    """Scan product via Barcode string (lookup via Open Food Facts)."""
+    """Scan product via Barcode string (lookup via Open Food Facts / regional database)."""
     product_data = await fetch_product_by_barcode(req.barcode)
     if not product_data:
         raise HTTPException(
             status_code=404,
-            detail=f"Product with barcode '{req.barcode}' was not found in Open Food Facts. Please use 'Scan Label' (OCR) to upload a picture of the label instead!"
+            detail=f"Product with barcode '{req.barcode}' was not found. Please use 'Scan Label' (OCR) to upload a picture of the label instead!"
         )
     return await process_and_save_product_scan(db, current_user, product_data, "barcode")
 
 @router.post("/label", response_model=ScanResponse)
 async def scan_label_ocr(
     file: UploadFile = File(...),
-    current_user: User = Depends(get_current_user),
+    current_user: Optional[User] = Depends(get_optional_user_for_scan),
     db: Session = Depends(get_db)
 ):
     """OCR Fallback Scanner: Process food label image upload via OpenCV + Tesseract OCR."""

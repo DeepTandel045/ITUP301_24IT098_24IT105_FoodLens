@@ -39,40 +39,68 @@ export const BarcodeScannerModal: React.FC<BarcodeScannerModalProps> = ({ isOpen
   const startCameraScanner = async () => {
     setError('');
     setHasConsented(true);
+  };
 
-    try {
-      const qrScanner = new Html5Qrcode('barcode-reader-view');
-      qrCodeInstanceRef.current = qrScanner;
+  useEffect(() => {
+    if (isOpen && activeTab === 'camera' && hasConsented) {
+      let qrScanner: Html5Qrcode | null = null;
+      let isMounted = true;
 
-      // Prefer rear camera on mobile devices (environment) with video-only constraints
-      const config = {
-        fps: 10,
-        qrbox: { width: 260, height: 160 },
-        aspectRatio: 1.333333
+      const initScanner = async () => {
+        try {
+          qrScanner = new Html5Qrcode('barcode-reader-view');
+          qrCodeInstanceRef.current = qrScanner;
+
+          const config = {
+            fps: 15,
+            qrbox: { width: 280, height: 160 },
+            aspectRatio: 1.333333
+          };
+
+          await qrScanner.start(
+            { facingMode: 'environment' },
+            config,
+            (decodedText) => {
+              if (isMounted) {
+                stopScanner().then(() => {
+                  onScanSuccess(decodedText.trim());
+                });
+              }
+            },
+            () => {
+              // Frame scan failure ignored
+            }
+          );
+        } catch (err: any) {
+          if (isMounted) {
+            console.error('Camera start error:', err);
+            setError(
+              err?.name === 'NotAllowedError' || err?.message?.includes('Permission denied')
+                ? 'Camera access was denied. Please allow camera permissions in browser settings or use manual barcode entry below.'
+                : 'Unable to start camera. Please enter barcode manually below.'
+            );
+          }
+        }
       };
 
-      await qrScanner.start(
-        { facingMode: 'environment' },
-        config,
-        (decodedText) => {
-          // Success callback: stop camera immediately upon detecting barcode
-          stopScanner().then(() => {
-            onScanSuccess(decodedText.trim());
+      // Slight timeout to ensure #barcode-reader-view is in DOM
+      const timer = setTimeout(initScanner, 100);
+
+      return () => {
+        isMounted = false;
+        clearTimeout(timer);
+        if (qrScanner && qrScanner.isScanning) {
+          qrScanner.stop().catch(() => {}).finally(() => {
+            try {
+              qrScanner?.clear();
+            } catch {
+              // Ignore
+            }
           });
-        },
-        () => {
-          // Frame read callback (ignore non-barcode frames)
         }
-      );
-    } catch (err: any) {
-      console.error('Camera start error:', err);
-      setError(
-        err?.name === 'NotAllowedError' || err?.message?.includes('Permission denied')
-          ? 'Camera access was denied. Please allow camera permissions in browser settings or use manual barcode entry below.'
-          : 'Unable to access camera. Please enter barcode manually.'
-      );
+      };
     }
-  };
+  }, [isOpen, activeTab, hasConsented]);
 
   useEffect(() => {
     if (!isOpen) {
