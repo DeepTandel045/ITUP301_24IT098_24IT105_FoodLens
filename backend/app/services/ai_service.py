@@ -1,30 +1,44 @@
-from typing import Dict, Any, List, Optional
+from typing import Dict, Any, List, Optional, Union
 import httpx
 from app.core.config import settings
+
+def format_goals_label(goal: Union[str, List[str]]) -> str:
+    """Format single or multiple goals into a natural English title."""
+    if isinstance(goal, list):
+        items = [str(g).strip().replace("_", " ").title() for g in goal if str(g).strip()]
+    elif isinstance(goal, str):
+        items = [g.strip().replace("_", " ").title() for g in goal.split(",") if g.strip()]
+    else:
+        items = ["General Healthy Eating"]
+    if not items:
+        return "General Healthy Eating"
+    if len(items) == 1:
+        return items[0]
+    return ", ".join(items[:-1]) + " & " + items[-1]
 
 async def generate_score_explanation(
     product_name: str,
     general_score: float,
     personalized_score: float,
-    user_goal: str,
+    user_goal: Union[str, List[str]],
     breakdown: Dict[str, Any]
 ) -> str:
     """Generate plain-English, educational score explanation using OpenAI or intelligent offline generator."""
+    goal_label = format_goals_label(user_goal)
     if settings.OPENAI_API_KEY:
         try:
-            return await _call_openai_score_explanation(product_name, general_score, personalized_score, user_goal, breakdown)
+            return await _call_openai_score_explanation(product_name, general_score, personalized_score, goal_label, breakdown)
         except Exception:
             pass
 
     # Offline intelligent fallback generator
-    goal_label = user_goal.replace("_", " ").title()
     positives = [p["factor"] for p in breakdown.get("positive", [])]
     negatives = [n["factor"] for n in breakdown.get("negative", [])]
     warnings = [w["factor"] for w in breakdown.get("goal_warnings", [])]
 
     explanation = f"{product_name} received a General FoodLens score of **{general_score}/100**"
     if personalized_score != general_score:
-        explanation += f" and a Personalized Suitability score of **{personalized_score}/100** tailored to your **{goal_label}** goal."
+        explanation += f" and a Personalized Suitability score of **{personalized_score}/100** tailored to your **{goal_label}** goal(s)."
     else:
         explanation += f" for your **{goal_label}** profile."
 
@@ -89,9 +103,9 @@ async def _call_openai_score_explanation(
         raise Exception("OpenAI API call failed")
 
 
-async def generate_healthy_next_step(user_goal: str, recent_scores: List[float]) -> str:
+async def generate_healthy_next_step(user_goal: Union[str, List[str]], recent_scores: List[float]) -> str:
     """Generate educational next-step recommendation based on recent intake trends."""
-    goal_name = user_goal.replace("_", " ").title()
+    goal_name = format_goals_label(user_goal)
     avg_score = sum(recent_scores) / len(recent_scores) if recent_scores else 70.0
 
     if avg_score < 60.0:

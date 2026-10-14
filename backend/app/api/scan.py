@@ -79,6 +79,7 @@ async def process_and_save_product_scan(
     # Build nutrition dict for scoring engine
     nutr_data = {
         "energy_kcal": nutrition.energy_kcal if nutrition else None,
+        "carbohydrates_g": nutrition.carbohydrates_g if nutrition else None,
         "sugars_g": nutrition.sugars_g if nutrition else None,
         "fat_g": nutrition.fat_g if nutrition else None,
         "saturated_fat_g": nutrition.saturated_fat_g if nutrition else None,
@@ -206,6 +207,8 @@ async def scan_barcode(
 @router.post("/label", response_model=ScanResponse)
 async def scan_label_ocr(
     file: UploadFile = File(...),
+    product_name: Optional[str] = Form(None),
+    brand_name: Optional[str] = Form(None),
     current_user: Optional[User] = Depends(get_optional_user_for_scan),
     db: Session = Depends(get_db)
 ):
@@ -215,6 +218,6 @@ async def scan_label_ocr(
         raise HTTPException(status_code=400, detail="Empty image file upload")
 
     raw_text, confidence = extract_text_from_image(image_bytes)
-    product_data = parse_ocr_text_to_product(raw_text)
+    product_data = parse_ocr_text_to_product(raw_text, product_name=product_name, brand_name=brand_name)
     
     return await process_and_save_product_scan(db, current_user, product_data, "ocr")

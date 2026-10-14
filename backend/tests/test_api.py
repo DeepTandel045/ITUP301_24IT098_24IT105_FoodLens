@@ -55,3 +55,56 @@ def test_dashboard_real_data_endpoint():
     assert dash_data["profile_needs"]["goal_title"] is not None
     assert "timeframe_label" in dash_data
     assert isinstance(dash_data["today_scans_count"], int)
+
+def test_profile_multi_goals_and_dietary():
+    res_log = client.post("/api/auth/login", json={"email": "test_user_pytest@foodlens.com", "password": "testpassword123"})
+    token = res_log.json()["access_token"]
+    headers = {"Authorization": f"Bearer {token}"}
+
+    update_payload = {
+        "health_goals": ["diabetes_oriented", "low_sodium", "high_protein"],
+        "dietary_preferences": ["vegetarian", "dairy_free"],
+        "allergies": ["peanuts"]
+    }
+    res_put = client.put("/api/profile", json=update_payload, headers=headers)
+    assert res_put.status_code == 200
+    data = res_put.json()
+    assert "diabetes_oriented" in data["health_goals"]
+    assert "low_sodium" in data["health_goals"]
+    assert "high_protein" in data["health_goals"]
+    assert "vegetarian" in data["dietary_preferences"]
+    assert "dairy_free" in data["dietary_preferences"]
+    assert "peanuts" in data["allergies"]
+
+    # Verify via /api/auth/me
+    res_me = client.get("/api/auth/me", headers=headers)
+    assert res_me.status_code == 200
+    me_data = res_me.json()
+    assert "diabetes_oriented" in me_data["health_goals"]
+    assert "vegetarian" in me_data["dietary_preferences"]
+
+def test_label_scan_with_custom_product_name():
+    res_log = client.post("/api/auth/login", json={"email": "test_user_pytest@foodlens.com", "password": "testpassword123"})
+    token = res_log.json()["access_token"]
+    headers = {"Authorization": f"Bearer {token}"}
+
+    # Upload mock image with custom product_name and brand_name
+    mock_img_bytes = b"fake-jpeg-bytes-for-test"
+    files = {"file": ("test_label.jpg", mock_img_bytes, "image/jpeg")}
+    data = {
+        "product_name": "Haldiram's Aloo Bhujia",
+        "brand_name": "Haldiram's"
+    }
+    res = client.post("/api/scan/label", files=files, data=data, headers=headers)
+    assert res.status_code == 200
+    scan_data = res.json()
+    assert scan_data["product"]["name"] == "Haldiram's Aloo Bhujia"
+    assert scan_data["product"]["brand"] == "Haldiram's"
+
+    # Test PATCH to rename product
+    prod_id = scan_data["product"]["id"]
+    patch_res = client.patch(f"/api/products/{prod_id}", json={"name": "Haldiram's Spicy Aloo Bhujia (Updated)"})
+    assert patch_res.status_code == 200
+    assert patch_res.json()["name"] == "Haldiram's Spicy Aloo Bhujia (Updated)"
+
+

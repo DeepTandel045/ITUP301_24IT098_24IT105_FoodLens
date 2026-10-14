@@ -67,6 +67,10 @@ def login(credentials: UserLogin, db: Session = Depends(get_db)):
 @router.get("/me", response_model=UserProfileResponse)
 def get_me(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     profile = db.query(UserProfile).filter(UserProfile.user_id == current_user.id).first()
+    raw_goals = profile.dietary_goal if profile and profile.dietary_goal else "general_healthy_eating"
+    health_goals = [g.strip() for g in raw_goals.split(",") if g.strip()]
+    if not health_goals:
+        health_goals = ["general_healthy_eating"]
     prefs = [p.preference_type for p in current_user.preferences]
     allergies = [a.allergen for a in current_user.allergies]
 
@@ -75,7 +79,9 @@ def get_me(current_user: User = Depends(get_current_user), db: Session = Depends
         name=current_user.name,
         email=current_user.email,
         age_range=profile.age_range if profile else "18-35",
-        dietary_goal=profile.dietary_goal if profile else "general_healthy_eating",
+        dietary_goal=raw_goals,
+        health_goals=health_goals,
+        dietary_preferences=prefs,
         preferences=prefs,
         allergies=allergies
     )

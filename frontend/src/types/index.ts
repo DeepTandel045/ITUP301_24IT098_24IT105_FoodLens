@@ -62,6 +62,8 @@ export interface UserProfile {
   email: string;
   age_range: string;
   dietary_goal: string;
+  health_goals?: string[];
+  dietary_preferences?: string[];
   preferences: string[];
   allergies: string[];
 }
@@ -87,6 +89,8 @@ export interface BasketAnalysis {
 export interface DashboardProfileNeeds {
   goal_key: string;
   goal_title: string;
+  active_goals?: string[];
+  dietary_preferences?: string[];
   primary_metric: string;
   metric_unit: string;
   target_guideline: string;

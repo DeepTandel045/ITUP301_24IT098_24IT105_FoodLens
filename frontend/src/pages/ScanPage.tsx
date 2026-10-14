@@ -10,7 +10,9 @@ import {
   Scan,
   HelpCircle,
   Keyboard,
-  Camera
+  Camera,
+  Tag,
+  Sparkles
 } from 'lucide-react';
 
 interface ScanPageProps {
@@ -23,6 +25,8 @@ export const ScanPage: React.FC<ScanPageProps> = ({ onNavigate }) => {
   const [manualBarcode, setManualBarcode] = useState('');
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [productName, setProductName] = useState('');
+  const [brandName, setBrandName] = useState('');
   
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -53,6 +57,15 @@ export const ScanPage: React.FC<ScanPageProps> = ({ onNavigate }) => {
       const file = e.target.files[0];
       setSelectedFile(file);
       setPreviewUrl(URL.createObjectURL(file));
+
+      // Attempt smart initial name from filename if user hasn't typed one
+      if (!productName) {
+        const raw = file.name.replace(/\.[^/.]+$/, '').replace(/[_-]/g, ' ').trim();
+        const low = raw.toLowerCase();
+        if (raw && !low.startsWith('image') && !low.startsWith('img') && !low.startsWith('photo') && !low.startsWith('screenshot') && !low.startsWith('scan')) {
+          setProductName(raw.replace(/\b\w/g, c => c.toUpperCase()));
+        }
+      }
     }
   };
 
@@ -61,7 +74,11 @@ export const ScanPage: React.FC<ScanPageProps> = ({ onNavigate }) => {
     setLoading(true);
     setError('');
     try {
-      const scanRes = await scanService.scanLabelImage(selectedFile);
+      const scanRes = await scanService.scanLabelImage(
+        selectedFile,
+        productName.trim() || undefined,
+        brandName.trim() || undefined
+      );
       onNavigate('product_details', scanRes);
     } catch (err: any) {
       setError(err.response?.data?.detail || 'OCR label processing failed. Please upload a clear photo of the ingredient list or nutrition table.');
@@ -327,25 +344,90 @@ export const ScanPage: React.FC<ScanPageProps> = ({ onNavigate }) => {
         </div>
       )}
 
-      {/* Label Upload Submission Button if file selected */}
+      {/* Label Upload Submission Card if file selected */}
       {(activeScanMode === 'upload' || activeScanMode === 'label') && selectedFile && (
-        <div className="card-fresh p-4 sm:p-5 flex flex-col sm:flex-row items-center justify-between gap-3 bg-white border border-[#E2E8F0]">
-          <div className="space-y-0.5 text-center sm:text-left">
-            <span className="text-xs font-bold text-slate-800 block">
-              Photo Selected: {selectedFile.name}
-            </span>
-            <span className="text-[11px] text-slate-500 block">
-              Ready to extract text and decode ingredients via OpenCV OCR
-            </span>
+        <div className="card-fresh p-5 sm:p-6 space-y-4 bg-white border-2 border-emerald-500 shadow-md">
+          <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+            <div className="flex items-center gap-2">
+              <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+              <h3 className="text-sm font-black text-[#18181B] uppercase tracking-wider">
+                Photo Ready • Name / Identify Item
+              </h3>
+            </div>
+            <button
+              type="button"
+              onClick={() => { setSelectedFile(null); setPreviewUrl(null); }}
+              className="text-xs font-bold text-slate-400 hover:text-rose-500 flex items-center gap-1 cursor-pointer"
+            >
+              <X className="w-3.5 h-3.5" /> Remove Photo
+            </button>
           </div>
-          <button
-            onClick={handleOcrSubmit}
-            disabled={loading}
-            className="w-full sm:w-auto px-6 py-3 rounded-xl font-black bg-slate-900 text-white text-xs hover:bg-slate-800 flex items-center justify-center gap-2 shadow-xs cursor-pointer active:scale-95"
-          >
-            <span>✓ Done / Analyze via AI OCR</span>
-            <ArrowRight className="w-4 h-4 text-[#B9F24A]" />
-          </button>
+
+          <div className="grid sm:grid-cols-2 gap-3.5">
+            <div className="space-y-1.5">
+              <label className="text-xs font-black text-slate-700 flex items-center gap-1.5">
+                <Tag className="w-3.5 h-3.5 text-emerald-600" />
+                Product / Item Name
+              </label>
+              <input
+                type="text"
+                placeholder="e.g., Maggi Masala Noodles, Protein Bar..."
+                value={productName}
+                onChange={(e) => setProductName(e.target.value)}
+                className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-xs font-bold text-slate-900 focus:outline-none focus:border-emerald-600 focus:bg-white transition-colors"
+              />
+              <span className="text-[10px] text-slate-400 block">
+                Type or accept product name so FoodLens scores and saves it accurately.
+              </span>
+            </div>
+
+            <div className="space-y-1.5">
+              <label className="text-xs font-black text-slate-700 flex items-center gap-1.5">
+                <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+                Brand Name (Optional)
+              </label>
+              <input
+                type="text"
+                placeholder="e.g., Nestle, Britannia, Amul..."
+                value={brandName}
+                onChange={(e) => setBrandName(e.target.value)}
+                className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-xs font-bold text-slate-900 focus:outline-none focus:border-amber-500 focus:bg-white transition-colors"
+              />
+              <span className="text-[10px] text-slate-400 block">
+                Brand or manufacturer name.
+              </span>
+            </div>
+          </div>
+
+          {/* Quick Item Suggestions Chips */}
+          <div className="flex items-center gap-1.5 flex-wrap pt-1">
+            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mr-1">Quick Suggestions:</span>
+            {['Maggi Noodles', 'Protein Bar', 'Roasted Makhana', 'Peanut Butter', 'Oat Biscuits', 'Local Kirana Staple'].map((sug) => (
+              <button
+                key={sug}
+                type="button"
+                onClick={() => setProductName(sug)}
+                className="text-[10px] font-extrabold px-2.5 py-1 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 cursor-pointer active:scale-95 transition-all"
+              >
+                + {sug}
+              </button>
+            ))}
+          </div>
+
+          {/* Submission Bar */}
+          <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-slate-100">
+            <div className="text-[11px] text-slate-500 text-center sm:text-left">
+              File: <strong className="text-slate-800">{selectedFile.name}</strong> • Optical Character Recognition + Scoring Engine
+            </div>
+            <button
+              onClick={handleOcrSubmit}
+              disabled={loading}
+              className="w-full sm:w-auto px-7 py-3.5 rounded-xl font-black bg-slate-900 text-white text-xs hover:bg-slate-800 flex items-center justify-center gap-2 shadow-md cursor-pointer active:scale-95 transition-all disabled:opacity-50"
+            >
+              <span>✓ Accept & Analyze: {productName.trim() ? `"${productName.trim()}"` : 'Scanned Food'}</span>
+              <ArrowRight className="w-4 h-4 text-emerald-400" />
+            </button>
+          </div>
         </div>
       )}
 

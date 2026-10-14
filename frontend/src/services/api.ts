@@ -58,7 +58,14 @@ export const authService = {
 };
 
 export const profileService = {
-  async updateProfile(data: { age_range?: string; dietary_goal?: string; preferences?: string[]; allergies?: string[] }): Promise<UserProfile> {
+  async updateProfile(data: { 
+    age_range?: string; 
+    dietary_goal?: string; 
+    health_goals?: string[];
+    dietary_preferences?: string[];
+    preferences?: string[]; 
+    allergies?: string[];
+  }): Promise<UserProfile> {
     const res = await api.put('/profile', data);
     return res.data;
   }
@@ -70,9 +77,15 @@ export const scanService = {
     return res.data;
   },
 
-  async scanLabelImage(file: File): Promise<ScanResult> {
+  async scanLabelImage(file: File, productName?: string, brandName?: string): Promise<ScanResult> {
     const formData = new FormData();
     formData.append('file', file);
+    if (productName && productName.trim()) {
+      formData.append('product_name', productName.trim());
+    }
+    if (brandName && brandName.trim()) {
+      formData.append('brand_name', brandName.trim());
+    }
     const res = await api.post('/scan/label', formData, {
       headers: { 'Content-Type': 'multipart/form-data' }
     });
@@ -83,6 +96,11 @@ export const scanService = {
 export const productService = {
   async getProduct(productId: number): Promise<Product> {
     const res = await api.get(`/products/${productId}`);
+    return res.data;
+  },
+
+  async updateProduct(productId: number, data: { name?: string; brand?: string; category?: string }): Promise<Product> {
+    const res = await api.patch(`/products/${productId}`, data);
     return res.data;
   },
 

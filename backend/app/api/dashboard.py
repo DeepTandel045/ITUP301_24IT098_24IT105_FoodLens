@@ -17,7 +17,10 @@ async def get_dashboard_analytics(
     db: Session = Depends(get_db)
 ):
     profile = db.query(UserProfile).filter(UserProfile.user_id == current_user.id).first()
-    dietary_goal = profile.dietary_goal if profile else "general_healthy_eating"
+    dietary_goal = profile.dietary_goal if profile and profile.dietary_goal else "general_healthy_eating"
+    active_goals = [g.strip() for g in dietary_goal.split(",") if g.strip()]
+    if not active_goals:
+        active_goals = ["general_healthy_eating"]
 
     # User profile preferences and allergies
     user_allergies = [a.allergen for a in current_user.allergies] if current_user.allergies else []
@@ -39,6 +42,11 @@ async def get_dashboard_analytics(
             "metric": "Sodium",
             "unit": "mg",
             "guideline": "Strict limit: Keep daily sodium intake under 1,500mg"
+        },
+        "low_sugar": {
+            "metric": "Low Sugar",
+            "unit": "g",
+            "guideline": "Minimize added refined sugars and high-glycemic syrups"
         },
         "heart_conscious": {
             "metric": "Sodium & Saturated Fat",
@@ -66,7 +74,11 @@ async def get_dashboard_analytics(
             "guideline": "Keep whole nutrients high and minimize ultra-processed additives"
         }
     }
-    goal_info = guidelines_map.get(dietary_goal, guidelines_map["general_healthy_eating"])
+    
+    matched_guidelines = [guidelines_map.get(g, guidelines_map["general_healthy_eating"]) for g in active_goals]
+    metrics_list = list(dict.fromkeys([m["metric"] for m in matched_guidelines]))
+    combined_metrics = " • ".join(metrics_list)
+    combined_guideline = " • ".join([m["guideline"] for m in matched_guidelines])
 
     # 1. Fetch all user scans ordered by date
     all_user_scans = db.query(Scan).filter(Scan.user_id == current_user.id).order_by(Scan.scanned_at.desc()).all()
@@ -248,12 +260,17 @@ async def get_dashboard_analytics(
     # 5. Weekly average score & profile needs object
     weekly_avg = round(sum(window_scores) / len(window_scores), 1) if window_scores else None
 
+    from app.services.ai_service import format_goals_label
+    combined_title = format_goals_label(active_goals)
+
     profile_needs = DashboardProfileNeeds(
         goal_key=dietary_goal,
-        goal_title=dietary_goal.replace("_", " ").title(),
-        primary_metric=goal_info["metric"],
-        metric_unit=goal_info["unit"],
-        target_guideline=goal_info["guideline"],
+        goal_title=combined_title,
+        active_goals=active_goals,
+        dietary_preferences=user_prefs,
+        primary_metric=combined_metrics if combined_metrics else "Balanced Nutrition",
+        metric_unit="mixed",
+        target_guideline=combined_guideline,
         allergies=user_allergies,
         preferences=user_prefs,
         weekly_total_scans=window_scans_count,
@@ -263,13 +280,13 @@ async def get_dashboard_analytics(
 
     # 6. Generate healthy next step insight based on actual score and profile
     healthy_next_step = await generate_healthy_next_step(
-        dietary_goal, 
+        active_goals, 
         today_scores if today_scores else window_scores[-3:] if window_scores else []
     )
 
     return DashboardResponse(
         user_name=current_user.name,
-        dietary_goal=dietary_goal.replace("_", " ").title(),
+        dietary_goal=combined_title,
         today_scans_count=len(today_scans),
         average_today_score=avg_today_score,
         score_change_from_yesterday=score_diff_yesterday,

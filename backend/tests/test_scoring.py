@@ -44,3 +44,26 @@ def test_allergy_collision_penalty():
     )
     assert res["personalized_score"] <= 50.0
     assert any("CRITICAL ALLERGEN" in w["factor"] for w in res["breakdown"]["goal_warnings"])
+
+def test_multiple_goals_scoring():
+    nutrition = {
+        "energy_kcal": 300.0,
+        "sugars_g": 15.0,
+        "fat_g": 4.0,
+        "saturated_fat_g": 1.0,
+        "protein_g": 14.0,
+        "fiber_g": 2.0,
+        "sodium_mg": 550.0
+    }
+    # Test with both diabetes_oriented and low_sodium simultaneously
+    res = calculate_foodlens_score(
+        nutrition=nutrition,
+        ingredients=["soy protein", "sugar", "salt"],
+        allergens=[],
+        user_goal=["diabetes_oriented", "low_sodium"]
+    )
+    # Both warnings should appear: high sugar warning from diabetes and high sodium warning from low_sodium
+    factors = [w["factor"] for w in res["breakdown"]["goal_warnings"]]
+    assert any("Diabetes Warning" in f for f in factors)
+    assert any("Low Sodium Goal Warning" in f for f in factors)
+

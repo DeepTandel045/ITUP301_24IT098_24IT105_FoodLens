@@ -8,7 +8,14 @@ interface AuthContextType {
   login: (email: string, password: string) => Promise<void>;
   register: (name: string, email: string, password: string) => Promise<void>;
   logout: () => void;
-  updateProfile: (data: { age_range?: string; dietary_goal?: string; preferences?: string[]; allergies?: string[] }) => Promise<void>;
+  updateProfile: (data: { 
+    age_range?: string; 
+    dietary_goal?: string; 
+    health_goals?: string[];
+    dietary_preferences?: string[];
+    preferences?: string[]; 
+    allergies?: string[];
+  }) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -53,7 +60,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setUser(null);
   };
 
-  const updateProfile = async (data: { age_range?: string; dietary_goal?: string; preferences?: string[]; allergies?: string[] }) => {
+  const updateProfile = async (data: { 
+    age_range?: string; 
+    dietary_goal?: string; 
+    health_goals?: string[];
+    dietary_preferences?: string[];
+    preferences?: string[]; 
+    allergies?: string[];
+  }) => {
     const updated = await profileService.updateProfile(data);
     setUser(updated);
   };

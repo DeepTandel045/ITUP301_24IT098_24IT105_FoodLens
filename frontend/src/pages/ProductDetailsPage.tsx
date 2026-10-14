@@ -13,7 +13,9 @@ import {
   GitCompare, 
   ArrowLeft, 
   Package,
-  Info
+  Info,
+  Pencil,
+  Check
 } from 'lucide-react';
 
 interface ProductDetailsPageProps {
@@ -23,6 +25,13 @@ interface ProductDetailsPageProps {
 
 export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({ scanResult, onNavigate }) => {
   const { product, score } = scanResult;
+  const [currentName, setCurrentName] = useState(product.name);
+  const [currentBrand, setCurrentBrand] = useState(product.brand);
+  const [isEditingName, setIsEditingName] = useState(false);
+  const [editNameVal, setEditNameVal] = useState(product.name);
+  const [editBrandVal, setEditBrandVal] = useState(product.brand);
+  const [savingName, setSavingName] = useState(false);
+
   const [alternatives, setAlternatives] = useState<Product[]>([]);
   const [addedToBasket, setAddedToBasket] = useState(false);
   const [selectedIngredient, setSelectedIngredient] = useState<IngredientDetail | null>(null);
@@ -42,6 +51,24 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({ scanResu
       setTimeout(() => setAddedToBasket(false), 2500);
     } catch (err) {
       console.error(err);
+    }
+  };
+
+  const handleSaveName = async () => {
+    if (!editNameVal.trim()) return;
+    setSavingName(true);
+    try {
+      const updated = await productService.updateProduct(product.id, {
+        name: editNameVal.trim(),
+        brand: editBrandVal.trim()
+      });
+      setCurrentName(updated.name);
+      setCurrentBrand(updated.brand);
+      setIsEditingName(false);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setSavingName(false);
     }
   };
 
@@ -124,14 +151,60 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({ scanResu
           <div className="space-y-2">
             <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2">
               <span className="text-[10px] font-extrabold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-slate-900 text-white">
-                {product.brand || 'KIND'}
+                {currentBrand || 'Brand'}
               </span>
               <span className="text-[10px] font-extrabold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200">
                 Source: {product.data_source || 'Open Food Facts'}
               </span>
             </div>
 
-            <h1 className="text-2xl sm:text-3xl font-black text-[#18181B] tracking-tight">{product.name}</h1>
+            {isEditingName ? (
+              <div className="flex flex-col gap-2 pt-1 max-w-md">
+                <input
+                  type="text"
+                  value={editNameVal}
+                  onChange={e => setEditNameVal(e.target.value)}
+                  className="px-3.5 py-2 rounded-xl border-2 border-emerald-500 font-black text-base text-slate-900 bg-white focus:outline-none"
+                  placeholder="Enter / accept product name"
+                  autoFocus
+                />
+                <input
+                  type="text"
+                  value={editBrandVal}
+                  onChange={e => setEditBrandVal(e.target.value)}
+                  className="px-3 py-1.5 rounded-lg border border-slate-300 text-xs font-bold text-slate-700 bg-white focus:outline-none"
+                  placeholder="Brand name (optional)"
+                />
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={handleSaveName}
+                    disabled={savingName}
+                    className="px-3.5 py-1.5 rounded-lg bg-emerald-600 text-white text-xs font-extrabold hover:bg-emerald-500 cursor-pointer active:scale-95 flex items-center gap-1 shadow-xs"
+                  >
+                    <Check className="w-3.5 h-3.5" />
+                    {savingName ? 'Saving...' : 'Accept & Save Name'}
+                  </button>
+                  <button
+                    onClick={() => { setIsEditingName(false); setEditNameVal(currentName); setEditBrandVal(currentBrand); }}
+                    className="px-3 py-1.5 rounded-lg text-slate-600 text-xs font-bold hover:bg-slate-100 cursor-pointer"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div className="flex items-center gap-2.5 flex-wrap justify-center sm:justify-start">
+                <h1 className="text-2xl sm:text-3xl font-black text-[#18181B] tracking-tight">{currentName}</h1>
+                <button
+                  onClick={() => setIsEditingName(true)}
+                  title="Rename or accept custom item name"
+                  className="inline-flex items-center gap-1 text-[11px] font-extrabold text-slate-500 hover:text-emerald-700 px-2.5 py-1 rounded-full border border-slate-200 hover:border-emerald-300 hover:bg-emerald-50/50 cursor-pointer transition-all active:scale-95"
+                >
+                  <Pencil className="w-3 h-3 text-slate-500" />
+                  <span>Rename / Accept</span>
+                </button>
+              </div>
+            )}
             <p className="text-xs text-[#64748B] font-semibold">Category: {product.category}</p>
           </div>
         </div>
@@ -192,25 +265,89 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({ scanResu
 
       </div>
 
-      {/* 3. QUICK NUTRITION PILLS (Red for Sugar concern, Green for Protein, Yellow for Sodium) */}
-      <div className="card-fresh p-6 space-y-3">
-        <h3 className="text-xs font-black text-[#64748B] uppercase tracking-wider">Nutrition Highlights</h3>
+      {/* 3. NUTRITION FACTS BREAKDOWN (Accurate parsed values per 100g / serving) */}
+      <div className="card-fresh p-6 space-y-4">
+        <div className="flex items-center justify-between flex-wrap gap-2">
+          <div>
+            <h3 className="text-xs font-black text-[#64748B] uppercase tracking-wider">Nutrition Highlights</h3>
+            <p className="text-[11px] text-slate-400 font-semibold">
+              Extracted from label {product.nutrition?.serving_size ? `(Per ${product.nutrition.serving_size})` : '(Per 100g)'}
+            </p>
+          </div>
+          <span className="text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-full bg-slate-100 text-slate-700 border border-slate-200">
+            Source: {product.data_source === 'ocr' ? 'OCR Label Extracted' : (product.data_source || 'Catalog')}
+          </span>
+        </div>
+
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
+          {/* Energy */}
           <div className="p-3.5 rounded-[20px] bg-[#F8F9FD] border-1.5 border-[#E2E8F0] hover:border-[#635BFF]/30 transition-all">
             <span className="text-[10px] text-[#64748B] font-bold block uppercase tracking-wider">Energy</span>
-            <strong className="text-base text-[#17172B] font-mono-code font-black block mt-0.5">{product.nutrition?.energy_kcal ?? 220} kcal</strong>
+            <strong className="text-base text-[#17172B] font-mono-code font-black block mt-0.5">
+              {product.nutrition?.energy_kcal != null ? `${product.nutrition.energy_kcal} kcal` : '--'}
+            </strong>
           </div>
-          <div className="p-3.5 rounded-[20px] bg-[#FFF1F2] border-1.5 border-[#EF4444]/30 hover:border-[#EF4444] transition-all">
-            <span className="text-[10px] text-[#EF4444] font-bold block uppercase tracking-wider">Sugars</span>
-            <strong className="text-base text-[#EF4444] font-mono-code font-black block mt-0.5">{product.nutrition?.sugars_g ?? 8}g</strong>
+
+          {/* Carbohydrates */}
+          <div className="p-3.5 rounded-[20px] bg-slate-50 border-1.5 border-[#E2E8F0] hover:border-slate-300 transition-all">
+            <span className="text-[10px] text-[#64748B] font-bold block uppercase tracking-wider">Carbs</span>
+            <strong className="text-base text-[#17172B] font-mono-code font-black block mt-0.5">
+              {product.nutrition?.carbohydrates_g != null ? `${product.nutrition.carbohydrates_g}g` : '--'}
+            </strong>
           </div>
+
+          {/* Sugars */}
+          <div className={`p-3.5 rounded-[20px] border-1.5 transition-all ${
+            product.nutrition?.sugars_g != null && product.nutrition.sugars_g > 15 
+              ? 'bg-[#FFF1F2] border-[#EF4444]/30 text-[#EF4444]' 
+              : 'bg-[#F8F9FD] border-[#E2E8F0] text-[#17172B]'
+          }`}>
+            <span className={`text-[10px] font-bold block uppercase tracking-wider ${
+              product.nutrition?.sugars_g != null && product.nutrition.sugars_g > 15 ? 'text-[#EF4444]' : 'text-[#64748B]'
+            }`}>Sugars</span>
+            <strong className="text-base font-mono-code font-black block mt-0.5">
+              {product.nutrition?.sugars_g != null ? `${product.nutrition.sugars_g}g` : '--'}
+            </strong>
+          </div>
+
+          {/* Protein */}
           <div className="p-3.5 rounded-[20px] bg-[#ECFDF5] border-1.5 border-[#10B981]/30 hover:border-[#10B981] transition-all">
             <span className="text-[10px] text-[#10B981] font-bold block uppercase tracking-wider">Protein</span>
-            <strong className="text-base text-[#10B981] font-mono-code font-black block mt-0.5">{product.nutrition?.protein_g ?? 20}g</strong>
+            <strong className="text-base text-[#10B981] font-mono-code font-black block mt-0.5">
+              {product.nutrition?.protein_g != null ? `${product.nutrition.protein_g}g` : '--'}
+            </strong>
           </div>
+
+          {/* Total Fat */}
+          <div className="p-3.5 rounded-[20px] bg-slate-50 border-1.5 border-[#E2E8F0] hover:border-slate-300 transition-all">
+            <span className="text-[10px] text-[#64748B] font-bold block uppercase tracking-wider">Total Fat</span>
+            <strong className="text-base text-[#17172B] font-mono-code font-black block mt-0.5">
+              {product.nutrition?.fat_g != null ? `${product.nutrition.fat_g}g` : '--'}
+            </strong>
+          </div>
+
+          {/* Saturated Fat */}
+          <div className="p-3.5 rounded-[20px] bg-slate-50 border-1.5 border-[#E2E8F0] hover:border-slate-300 transition-all">
+            <span className="text-[10px] text-[#64748B] font-bold block uppercase tracking-wider">Sat Fat</span>
+            <strong className="text-base text-[#17172B] font-mono-code font-black block mt-0.5">
+              {product.nutrition?.saturated_fat_g != null ? `${product.nutrition.saturated_fat_g}g` : '--'}
+            </strong>
+          </div>
+
+          {/* Dietary Fiber */}
+          <div className="p-3.5 rounded-[20px] bg-[#F0FDF4] border-1.5 border-[#10B981]/20 hover:border-[#10B981] transition-all">
+            <span className="text-[10px] text-[#059669] font-bold block uppercase tracking-wider">Fiber</span>
+            <strong className="text-base text-[#059669] font-mono-code font-black block mt-0.5">
+              {product.nutrition?.fiber_g != null ? `${product.nutrition.fiber_g}g` : '--'}
+            </strong>
+          </div>
+
+          {/* Sodium */}
           <div className="p-3.5 rounded-[20px] bg-[#FFFBEB] border-1.5 border-[#F59E0B]/30 hover:border-[#F59E0B] transition-all">
             <span className="text-[10px] text-[#D97706] font-bold block uppercase tracking-wider">Sodium</span>
-            <strong className="text-base text-[#D97706] font-mono-code font-black block mt-0.5">{product.nutrition?.sodium_mg ?? 140}mg</strong>
+            <strong className="text-base text-[#D97706] font-mono-code font-black block mt-0.5">
+              {product.nutrition?.sodium_mg != null ? `${product.nutrition.sodium_mg}mg` : '--'}
+            </strong>
           </div>
         </div>
       </div>
@@ -322,6 +459,34 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({ scanResu
               </span>
             </div>
           ))}
+        </div>
+
+        {/* Raw Extracted Label Ingredients Text & Detected Allergens */}
+        <div className="pt-4 border-t border-slate-100 space-y-3">
+          {product.allergens && product.allergens.length > 0 && (
+            <div className="flex items-center gap-2 flex-wrap">
+              <span className="text-xs font-black uppercase tracking-wider text-rose-700 bg-rose-50 border border-rose-200 px-2.5 py-1 rounded-full flex items-center gap-1.5">
+                <ShieldAlert className="w-3.5 h-3.5 text-rose-600" />
+                Contains Allergens:
+              </span>
+              {product.allergens.map((alg, i) => (
+                <span key={i} className="text-xs font-extrabold px-2.5 py-1 rounded-full bg-rose-100 text-rose-800 border border-rose-300">
+                  {alg}
+                </span>
+              ))}
+            </div>
+          )}
+
+          {product.ingredients_raw && (
+            <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-600 space-y-1">
+              <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 block">
+                Raw Extracted Label Text:
+              </span>
+              <p className="font-mono text-[11px] leading-relaxed break-words text-slate-700">
+                {product.ingredients_raw}
+              </p>
+            </div>
+          )}
         </div>
       </div>
 

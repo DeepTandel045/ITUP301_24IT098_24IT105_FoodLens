@@ -43,9 +43,11 @@ class TokenResponse(BaseModel):
 
 class UserProfileUpdate(BaseModel):
     age_range: Optional[str] = "18-35"
-    dietary_goal: Optional[str] = "general_healthy_eating"
-    preferences: Optional[List[str]] = []  # e.g., ["low_sugar", "high_protein"]
-    allergies: Optional[List[str]] = []    # e.g., ["peanuts", "gluten"]
+    dietary_goal: Optional[str] = None
+    health_goals: Optional[List[str]] = None
+    dietary_preferences: Optional[List[str]] = None
+    preferences: Optional[List[str]] = None  # e.g., ["low_sugar", "high_protein"]
+    allergies: Optional[List[str]] = None    # e.g., ["peanuts", "gluten"]
 
 class UserProfileResponse(BaseModel):
     id: int
@@ -53,8 +55,10 @@ class UserProfileResponse(BaseModel):
     email: str
     age_range: str
     dietary_goal: str
-    preferences: List[str]
-    allergies: List[str]
+    health_goals: List[str] = []
+    dietary_preferences: List[str] = []
+    preferences: List[str] = []
+    allergies: List[str] = []
 
 # --- Nutrition & Product Schemas ---
 
@@ -83,6 +87,11 @@ class ProductResponse(BaseModel):
     allergens: List[str] = []
     data_source: str
     nutrition: Optional[NutritionData] = None
+
+class ProductUpdate(BaseModel):
+    name: Optional[str] = None
+    brand: Optional[str] = None
+    category: Optional[str] = None
 
 # --- Scoring & Analysis Schemas ---
 
@@ -146,6 +155,8 @@ class BasketAnalysisResponse(BaseModel):
 class DashboardProfileNeeds(BaseModel):
     goal_key: str
     goal_title: str
+    active_goals: List[str] = []
+    dietary_preferences: List[str] = []
     primary_metric: str
     metric_unit: str
     target_guideline: str

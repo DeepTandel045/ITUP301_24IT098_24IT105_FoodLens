@@ -1,10 +1,10 @@
-from typing import Dict, Any, List, Tuple
+from typing import Dict, Any, List, Tuple, Union
 
 def calculate_foodlens_score(
     nutrition: Dict[str, Any],
     ingredients: List[str],
     allergens: List[str],
-    user_goal: str = "general_healthy_eating",
+    user_goal: Union[str, List[str]] = "general_healthy_eating",
     user_preferences: List[str] = None,
     user_allergies: List[str] = None
 ) -> Dict[str, Any]:
@@ -126,8 +126,19 @@ def calculate_foodlens_score(
     personalized_score = general_score
     goal_warnings = []
 
-    # A. Goal Specific Adjustments
-    if user_goal == "diabetes_oriented":
+    # Parse active goals
+    if isinstance(user_goal, list):
+        active_goals = {str(g).strip().lower() for g in user_goal if str(g).strip()}
+    elif isinstance(user_goal, str):
+        active_goals = {g.strip().lower() for g in user_goal.split(",") if g.strip()}
+    else:
+        active_goals = set()
+
+    if not active_goals:
+        active_goals = {"general_healthy_eating"}
+
+    # A. Goal Specific Adjustments (can evaluate multiple active goals simultaneously)
+    if "diabetes_oriented" in active_goals:
         if sugars is not None and sugars > 8.0:
             penalty = 25.0
             goal_warnings.append({
@@ -144,7 +155,7 @@ def calculate_foodlens_score(
             positive_factors.append({"factor": "Diabetes Friendly: High Fiber", "detail": "Helps stabilize blood sugar spikes", "impact": 8.0})
             personalized_score += 8.0
 
-    elif user_goal == "high_protein":
+    if "high_protein" in active_goals:
         if protein is not None:
             if protein >= 10.0:
                 positive_factors.append({"factor": "High Protein Goal Alignment", "detail": f"{protein}g protein per 100g", "impact": 10.0})
@@ -153,35 +164,57 @@ def calculate_foodlens_score(
                 goal_warnings.append({"factor": "Low Protein for Muscle/Fitness Goal", "detail": f"Only {protein}g protein", "impact": -10.0})
                 personalized_score -= 10.0
 
-    elif user_goal in ["low_sugar", "weight_management"]:
-        if sugars is not None and sugars > 10.0:
+    if "low_sugar" in active_goals and "diabetes_oriented" not in active_goals:
+        if sugars is not None and sugars > 8.0:
             penalty = 20.0
-            goal_warnings.append({"factor": "Goal Misalignment: High Sugar", "detail": f"{sugars}g sugar", "impact": -penalty})
+            goal_warnings.append({"factor": "Low Sugar Goal Warning", "detail": f"{sugars}g sugar per 100g", "impact": -penalty})
             personalized_score -= penalty
-        if energy is not None and energy > 350 and user_goal == "weight_management":
+        elif sugars is not None and sugars <= 3.0:
+            positive_factors.append({"factor": "Low Sugar Goal Alignment", "detail": f"{sugars}g sugar per 100g", "impact": 6.0})
+            personalized_score += 6.0
+
+    if "weight_management" in active_goals:
+        if sugars is not None and sugars > 10.0 and "diabetes_oriented" not in active_goals and "low_sugar" not in active_goals:
+            penalty = 18.0
+            goal_warnings.append({"factor": "Weight Management: High Sugar", "detail": f"{sugars}g sugar", "impact": -penalty})
+            personalized_score -= penalty
+        if energy is not None and energy > 350:
             penalty = 12.0
             goal_warnings.append({"factor": "High Calorie Density for Weight Management", "detail": f"{energy} kcal", "impact": -penalty})
             personalized_score -= penalty
+        if fiber is not None and fiber >= 3.0 and "diabetes_oriented" not in active_goals:
+            positive_factors.append({"factor": "Good Satiety / Fiber for Weight Management", "detail": f"{fiber}g fiber", "impact": 6.0})
+            personalized_score += 6.0
 
-    elif user_goal == "low_sodium":
+    if "low_sodium" in active_goals:
         if sodium is not None and sodium > 400:
             penalty = 22.0
-            goal_warnings.append({"factor": "Low Sodium Goal Warning", "detail": f"{sodium}mg sodium", "impact": -penalty})
+            goal_warnings.append({"factor": "Low Sodium Goal Warning", "detail": f"{sodium}mg sodium exceeds low-sodium limit", "impact": -penalty})
             personalized_score -= penalty
+        elif sodium is not None and sodium <= 120:
+            positive_factors.append({"factor": "Optimal Low Sodium Alignment", "detail": f"{sodium}mg sodium", "impact": 6.0})
+            personalized_score += 6.0
 
-    elif user_goal == "heart_conscious":
+    if "heart_conscious" in active_goals:
         if sat_fat is not None and sat_fat > 3.0:
             penalty = 18.0
             goal_warnings.append({"factor": "Heart Health Warning: High Saturated Fat", "detail": f"{sat_fat}g sat fat", "impact": -penalty})
             personalized_score -= penalty
+        if sodium is not None and sodium > 600 and "low_sodium" not in active_goals:
+            penalty = 14.0
+            goal_warnings.append({"factor": "Heart Health Warning: Elevated Sodium", "detail": f"{sodium}mg sodium", "impact": -penalty})
+            personalized_score -= penalty
 
-    # B. Preference Adjustments (Vegan / Vegetarian)
-    non_veg_keywords = ["chicken", "beef", "pork", "fish", "gelatin", "lard", "bacon", "lamb", "shrimp", "anchovy"]
-    dairy_keywords = ["milk", "cheese", "butter", "whey", "casein", "egg", "cream", "honey"]
+    # B. Preference Adjustments (Vegan / Vegetarian / Dairy-Free / Gluten-Free / Keto / Jain)
+    non_veg_keywords = ["chicken", "beef", "pork", "fish", "gelatin", "lard", "bacon", "lamb", "shrimp", "anchovy", "meat", "seafood"]
+    dairy_keywords = ["milk", "cheese", "butter", "whey", "casein", "cream", "ghee", "paneer", "curd", "yogurt", "lactose"]
+    gluten_keywords = ["wheat", "barley", "rye", "gluten", "maida", "semolina"]
+    root_veg_keywords = ["onion", "garlic", "potato", "carrot", "radish", "beetroot"]
 
     all_ingredient_text = " ".join([i.lower() for i in ingredients] + [a.lower() for a in allergens])
+    active_prefs = {p.strip().lower() for p in user_preferences} | (active_goals & {"vegetarian", "vegan", "keto", "gluten_free", "dairy_free", "jain", "pescatarian"})
     
-    if "vegetarian" in user_preferences or user_goal == "vegetarian":
+    if "vegetarian" in active_prefs or "jain" in active_prefs:
         found_non_veg = [k for k in non_veg_keywords if k in all_ingredient_text]
         if found_non_veg:
             penalty = 40.0
@@ -192,13 +225,56 @@ def calculate_foodlens_score(
             })
             personalized_score -= penalty
 
-    if "vegan" in user_preferences or user_goal == "vegan":
-        found_non_vegan = [k for k in (non_veg_keywords + dairy_keywords) if k in all_ingredient_text]
+    if "vegan" in active_prefs:
+        found_non_vegan = [k for k in (non_veg_keywords + dairy_keywords + ["egg", "honey"]) if k in all_ingredient_text]
         if found_non_vegan:
             penalty = 45.0
             goal_warnings.append({
                 "factor": "Non-Vegan Ingredient Detected",
                 "detail": f"Contains animal/dairy items: {', '.join(found_non_vegan).title()}",
+                "impact": -penalty
+            })
+            personalized_score -= penalty
+
+    if "dairy_free" in active_prefs:
+        found_dairy = [k for k in dairy_keywords if k in all_ingredient_text]
+        if found_dairy:
+            penalty = 35.0
+            goal_warnings.append({
+                "factor": "Dairy Ingredient Detected",
+                "detail": f"Contains dairy derivatives: {', '.join(found_dairy).title()}",
+                "impact": -penalty
+            })
+            personalized_score -= penalty
+
+    if "gluten_free" in active_prefs:
+        found_gluten = [k for k in gluten_keywords if k in all_ingredient_text]
+        if found_gluten:
+            penalty = 40.0
+            goal_warnings.append({
+                "factor": "Gluten Ingredient Detected",
+                "detail": f"Contains gluten-bearing ingredients: {', '.join(found_gluten).title()}",
+                "impact": -penalty
+            })
+            personalized_score -= penalty
+
+    if "keto" in active_prefs:
+        if sugars is not None and sugars > 4.0:
+            penalty = 20.0
+            goal_warnings.append({
+                "factor": "Keto Misalignment: Elevated Sugar",
+                "detail": f"{sugars}g sugar exceeds strict ketogenic limit (<4g)",
+                "impact": -penalty
+            })
+            personalized_score -= penalty
+
+    if "jain" in active_prefs:
+        found_root = [k for k in root_veg_keywords if k in all_ingredient_text]
+        if found_root:
+            penalty = 30.0
+            goal_warnings.append({
+                "factor": "Root Vegetable Detected (Jain Conflict)",
+                "detail": f"Contains underground root ingredient: {', '.join(found_root).title()}",
                 "impact": -penalty
             })
             personalized_score -= penalty
@@ -218,10 +294,12 @@ def calculate_foodlens_score(
     # Clamp Personalized Score between 0 and 100
     personalized_score = round(max(0.0, min(100.0, personalized_score)), 1)
 
+    goal_type_str = ", ".join(sorted(list(active_goals))) if active_goals else "general_healthy_eating"
+
     return {
         "general_score": general_score,
         "personalized_score": personalized_score,
-        "goal_type": user_goal,
+        "goal_type": goal_type_str,
         "confidence_level": confidence,
         "breakdown": {
             "positive": positive_factors,

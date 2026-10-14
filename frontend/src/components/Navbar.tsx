@@ -120,8 +120,15 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
               </div>
               <div className="flex-1 min-w-0">
                 <p className="text-xs font-bold text-[#18181B] truncate">{user.name}</p>
-                <p className="text-[10px] font-semibold text-[#065F46] bg-[#ECFDF5] border border-[#10B981]/25 px-2 py-0.5 rounded-full inline-block mt-0.5 uppercase tracking-wider">
-                  {user.dietary_goal ? user.dietary_goal.replace('_', ' ') : 'Healthy Plan'}
+                <p className="text-[10px] font-semibold text-[#065F46] bg-[#ECFDF5] border border-[#10B981]/25 px-2 py-0.5 rounded-full inline-block mt-0.5 uppercase tracking-wider truncate max-w-full">
+                  {(() => {
+                    const goals = user.health_goals && user.health_goals.length > 0
+                      ? user.health_goals
+                      : user.dietary_goal ? user.dietary_goal.split(',').filter(Boolean) : [];
+                    if (goals.length > 1) return `${goals[0].replace(/_/g, ' ')} +${goals.length - 1}`;
+                    if (goals.length === 1) return goals[0].replace(/_/g, ' ');
+                    return 'Healthy Plan';
+                  })()}
                 </p>
               </div>
             </div>
